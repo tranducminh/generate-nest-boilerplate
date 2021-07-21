@@ -1,6 +1,6 @@
 {
-  "name": "generate-nest-app",
-  "version": "0.0.21",
+  "name": "generate-nest-boilerplate",
+  "version": "0.0.22",
   "description": "",
   "author": "Tran Duc Minh",
   "license": "MIT",
@@ -72,13 +72,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tranducminh/generate-nest-app.git"
+    "url": "git+https://github.com/tranducminh/generate-nest-boilerplate.git"
   },
   "bugs": {
-    "url": "https://github.com/tranducminh/generate-nest-app/issues"
+    "url": "https://github.com/tranducminh/generate-nest-boilerplate/issues"
   },
-  "homepage": "https://github.com/tranducminh/generate-nest-app#readme",
-  "bin": {
-    "generate-boilerplate": "./bin/generate-app.js"
-  }
+  "homepage": "https://github.com/tranducminh/generate-nest-boilerplate#readme"
 }

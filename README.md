@@ -1,3 +1,3 @@
 ```bash
-npx generate-nest-app your-app
+npx generate-nest-boilerplate my-app
 ```
