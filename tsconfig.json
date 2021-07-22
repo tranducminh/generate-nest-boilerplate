@@ -14,6 +14,7 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["/*"],
+      "@base/*": ["base/*"],
       "@common/*": ["common/*"],
       "@configs/*": ["configs/*"],
       "@constants/*": ["constants/*"],
@@ -27,6 +28,7 @@
       "@mails/*": ["mails/*"],
       "@modules/*": ["modules/*"],
       "@views/*": ["views/*"],
+      "@utils/*": ["utils/*"],
     }
   },
   "include": ["src", "test"]

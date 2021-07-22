@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RedisModule } from 'nestjs-redis';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -36,6 +37,8 @@ import { AppService } from './app.service';
         databaseConfig.redisConfig,
       inject: [DatabaseConfig],
     }),
+
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
