@@ -1,9 +1,13 @@
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { SnakeNamingStrategy } from './snake-naming.strategy';
 
+@Injectable()
 export class DatabaseConfig {
   constructor(private configService: ConfigService) {}
 
-  public getTypeOrmConfig() {
+  public get typeOrmConfig(): TypeOrmModuleOptions {
     return {
       keepConnectionAlive: true,
       type: 'mysql',
@@ -13,26 +17,23 @@ export class DatabaseConfig {
       password: this.configService.get<string>('MYSQL_PASSWORD'),
       database: this.configService.get<string>('MYSQL_DATABASE'),
       logging: this.configService.get<string>('NODE_ENV') === 'development',
-      // namingStrategy: new SnakeNamingStrategy(),
+      namingStrategy: new SnakeNamingStrategy(),
       multipleStatements: true,
       migrationsTableName: '__migrations',
       extra: {
         charset: 'utf8mb4_unicode_ci',
       },
-      // autoLoadEntities: true,
       entities: ['dist/**/*.entity{.ts,.js}'],
       subscribers: ['dist/**/*.subscriber{.ts,.js}'],
       migrations: ['dist/databases/migrations/**/*{.ts,.js}'],
     };
   }
 
-  public get getRedisConfig() {
+  public get redisConfig() {
     return {
       host: this.configService.get<string>('REDIS_HOST'),
       port: this.configService.get<number>('REDIS_PORT'),
-      db: this.configService.get<number>('REDIS_DATABASE'),
-      dbQueue: this.configService.get<number>('REDIS_DATABASE_QUEUE'),
-      expire: this.configService.get<number>('REDIS_EXPIRATION_TIME'),
+      db: this.configService.get<number>('REDIS_DB'),
     };
   }
 }

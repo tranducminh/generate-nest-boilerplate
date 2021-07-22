@@ -4,9 +4,11 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import fastifyCsrf from 'fastify-csrf';
+import fastifyCookie from 'fastify-cookie';
 import { fastifyHelmet } from 'fastify-helmet';
 import { AppModule } from './app.module';
 import { AllExceptionFilter } from './exceptions/all-exception.filter';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -36,6 +38,12 @@ async function bootstrap() {
         scriptSrc: [`'self'`, `https: 'unsafe-inline'`, `cdn.jsdelivr.net`],
       },
     },
+  });
+
+  const config = app.get(ConfigService);
+
+  app.register(fastifyCookie, {
+    secret: config.get<string>('COOKIE_SECRET'),
   });
 
   app.register(fastifyCsrf);
