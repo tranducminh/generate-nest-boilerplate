@@ -9,8 +9,25 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "incremental": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["/*"],
+      "@common/*": ["common/*"],
+      "@configs/*": ["configs/*"],
+      "@constants/*": ["constants/*"],
+      "@databases/*": ["databases/*"],
+      "@decorators/*": ["decorators/*"],
+      "@exceptions/*": ["exceptions/*"],
+      "@filters/*": ["filters/*"],
+      "@guards/*": ["guards/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@jobs/*": ["jobs/*"],
+      "@mails/*": ["mails/*"],
+      "@modules/*": ["modules/*"],
+      "@views/*": ["views/*"],
+    }
+  },
+  "include": ["src", "test"]
 }

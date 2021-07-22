@@ -1,7 +1,7 @@
 {
   "name": "generate-nest-boilerplate",
   "version": "0.0.22",
-  "description": "",
+  "description": "This generator will help you build your own NestJS app with CQRS, TypeORM, MySQL, Redis, Typescript, fastify, S3",
   "author": "Tran Duc Minh",
   "license": "MIT",
   "scripts": {
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^1.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/platform-fastify": "^8.0.4",
@@ -77,5 +78,16 @@
   "bugs": {
     "url": "https://github.com/tranducminh/generate-nest-boilerplate/issues"
   },
-  "homepage": "https://github.com/tranducminh/generate-nest-boilerplate#readme"
+  "homepage": "https://github.com/tranducminh/generate-nest-boilerplate#readme",
+  "keys": [
+    "generator",
+    "boilerplate",
+    "nestjs",
+    "nest",
+    "typescript",
+    "node",
+    "nodejs",
+    "starter",
+    "cli"
+  ]
 }
