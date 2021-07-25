@@ -6,12 +6,14 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "target": "ESNext",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "baseUrl": "./src/",
     "incremental": true,
-    "skipLibCheck": true,
+    "noUncheckedIndexedAccess":true,
     "paths": {
       "@/*": ["/*"],
       "@base/*": ["base/*"],
@@ -31,5 +33,6 @@
       "@utils/*": ["utils/*"],
     }
   },
-  "include": ["src", "test"]
+  "include": ["src", "test"],
+  "exclude": ["node_modules", "dist"],
 }

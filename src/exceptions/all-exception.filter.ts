@@ -22,8 +22,12 @@ export class AllExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.getResponse()
         : 'Internal server';
+
     message = message instanceof Object ? message?.message : message;
-    response.status(status).json({
+
+    console.log(exception);
+
+    response.status(status).send({
       status,
       timestamp: new Date().toUTCString(),
       message,

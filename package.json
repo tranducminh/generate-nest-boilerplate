@@ -28,13 +28,17 @@
     "db:migration:run": "ts-node node_modules/typeorm/cli.js migration:run"
   },
   "dependencies": {
+    "@nestjs-architects/typed-cqrs": "^0.1.1",
     "@nestjs/common": "^7.4.4",
     "@nestjs/config": "^1.0.0",
     "@nestjs/core": "^7.4.4",
+    "@nestjs/cqrs": "^8.0.0",
     "@nestjs/platform-express": "^7.4.4",
     "@nestjs/platform-fastify": "^7.4.4",
     "@nestjs/throttler": "^2.0.0",
     "@nestjs/typeorm": "^7.1.4",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "fastify-cookie": "^5.3.1",
     "fastify-csrf": "^3.1.0",
     "fastify-helmet": "^5.3.2",

@@ -1,5 +1,4 @@
-import { BaseDto } from '@base/dtos/base.dto';
-import { UtilsService } from '@utils/index';
+import { BaseEntityDto } from '@base/dtos/base-entity.dto';
 import {
   Column,
   CreateDateColumn,
@@ -8,14 +7,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export abstract class BaseEntity<T extends BaseDto = BaseDto> {
+export abstract class BaseEntity<T extends BaseEntityDto = BaseEntityDto> {
   @PrimaryGeneratedColumn({ type: 'integer' })
   id: number;
-
-  setId(id: number) {
-    this.id = id;
-    return this;
-  }
 
   @CreateDateColumn()
   createdAt: Date;
@@ -38,6 +32,6 @@ export abstract class BaseEntity<T extends BaseDto = BaseDto> {
   abstract dtoClass: new (entity: BaseEntity) => T;
 
   toDto(): T {
-    return UtilsService.toDto(this.dtoClass, this);
+    return new this.dtoClass(this);
   }
 }

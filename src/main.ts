@@ -9,6 +9,8 @@ import { fastifyHelmet } from 'fastify-helmet';
 import { AppModule } from './app.module';
 import { AllExceptionFilter } from './exceptions/all-exception.filter';
 import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from '@nestjs/common';
+import './global/tsarray';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -22,6 +24,14 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Accept, Authorization',
     credentials: true,
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    })
+  );
 
   await app.register(fastifyHelmet, {
     contentSecurityPolicy: {

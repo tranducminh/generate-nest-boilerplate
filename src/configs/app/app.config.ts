@@ -4,14 +4,22 @@ export class AppConfig {
   constructor(private configService: ConfigService) {}
 
   public get(key: string): string {
-    return this.configService.get<string>(key);
+    const value = this.configService.get<string>(key);
+
+    if (!value) throw new Error(`${[key]} is not found in env file`);
+
+    return value;
   }
 
   public getNumber(key: string): number {
-    return this.configService.get<number>(key);
+    const value = this.configService.get<number>(key);
+
+    if (!value) throw new Error(`${[key]} is not found in env file`);
+
+    return value;
   }
 
-  public env(): string {
+  get env(): string {
     return this.configService.get<string>('NODE_ENV') || 'development';
   }
 }
