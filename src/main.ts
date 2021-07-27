@@ -1,3 +1,4 @@
+import './common/global/tsarray';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -7,10 +8,10 @@ import fastifyCsrf from 'fastify-csrf';
 import fastifyCookie from 'fastify-cookie';
 import { fastifyHelmet } from 'fastify-helmet';
 import { AppModule } from './app.module';
-import { AllExceptionFilter } from './exceptions/all-exception.filter';
+import { AllExceptionFilter } from './common/exceptions/all-exception.filter';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
-import './global/tsarray';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -60,6 +61,14 @@ async function bootstrap() {
 
   app.useGlobalFilters(new AllExceptionFilter());
 
-  await app.listen(3000);
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('My app')
+    .setDescription('My app description')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
+
+  await app.listen(config.get<number>('APP_PORT') || 8000);
 }
 bootstrap();

@@ -1,12 +1,16 @@
 import { BaseEntity } from '@base/entities/base.entity';
 import { ResponseDto } from '@common/dtos/response.dto';
 import { HttpStatus } from '@nestjs/common';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class BaseEntityDto {
+  @ApiProperty()
   id: number;
 
+  @ApiProperty()
   createdAt: Date;
 
+  @ApiPropertyOptional()
   updatedAt?: Date;
 
   constructor(entity: BaseEntity) {

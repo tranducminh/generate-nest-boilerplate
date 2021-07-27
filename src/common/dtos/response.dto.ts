@@ -1,34 +1,38 @@
 import { BaseEntityDto } from '@base/dtos/base-entity.dto';
+import { PaginationDto } from '@common/dtos/pagination.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
-
-const SuccessStatus = [
-  HttpStatus.OK,
-  HttpStatus.CREATED,
-  HttpStatus.ACCEPTED,
-  HttpStatus.NO_CONTENT,
-  HttpStatus.PARTIAL_CONTENT,
-];
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { isSuccessHttpStatus } from '@utils/index';
 
 export class ResponseDto<D extends BaseEntityDto | BaseEntityDto[] | null> {
+  @ApiPropertyOptional()
   data?: D;
+
+  @ApiPropertyOptional()
   status?: HttpStatus;
+
+  @ApiPropertyOptional()
   message?: string;
+
+  @ApiPropertyOptional({ type: PaginationDto })
+  pagination?: PaginationDto;
 
   constructor({
     data,
     status = HttpStatus.OK,
-    message = SuccessStatus.includes(status) ? 'Successful' : 'Failed',
+    message = isSuccessHttpStatus(status) ? 'Successful' : 'Failed',
+    pagination,
   }: {
     data?: D;
     status?: HttpStatus;
     message?: string;
+    pagination?: PaginationDto;
   }) {
-    if (!SuccessStatus.includes(status))
-      throw new HttpException(message, status);
+    if (!isSuccessHttpStatus(status)) throw new HttpException(message, status);
 
-    if (data) {
-      this.data = data;
-    }
+    if (data) this.data = data;
+    if (pagination) this.pagination = pagination;
+
     this.status = status;
     this.message = message;
   }

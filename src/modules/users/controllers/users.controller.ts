@@ -16,12 +16,20 @@ import { UserDto } from '../dtos/user.dto';
 import { UserFilterDto } from '../dtos/user-filter.dto';
 import { generateEmptyRes, ResponseDto } from '@common/dtos/response.dto';
 import { IUsersController } from '../interfaces/users.controller.interface';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiEmptyDataResponse,
+  ApiMultipleDataResponse,
+  ApiSingleDataResponse,
+} from '@common/decorators/api-response.decorator';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController implements IUsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiSingleDataResponse(UserDto)
   async create(
     @Body() createUserDto: CreateUserDto
   ): Promise<ResponseDto<UserDto>> {
@@ -31,6 +39,7 @@ export class UsersController implements IUsersController {
   }
 
   @Get()
+  @ApiMultipleDataResponse(UserDto)
   async findAll(
     @Query() filter: UserFilterDto
   ): Promise<ResponseDto<UserDto[]>> {
@@ -40,6 +49,7 @@ export class UsersController implements IUsersController {
   }
 
   @Get(':id')
+  @ApiSingleDataResponse(UserDto)
   async findOne(@Param('id') id: number): Promise<ResponseDto<UserDto>> {
     const user = await this.usersService.findOne(id);
 
@@ -47,6 +57,7 @@ export class UsersController implements IUsersController {
   }
 
   @Patch(':id')
+  @ApiEmptyDataResponse()
   async update(
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto
@@ -57,6 +68,7 @@ export class UsersController implements IUsersController {
   }
 
   @Delete(':id')
+  @ApiEmptyDataResponse()
   async remove(@Param('id') id: number): Promise<ResponseDto<null>> {
     await this.usersService.remove(id);
 
