@@ -33,6 +33,6 @@
       "@utils/*": ["utils/*"],
     }
   },
-  "include": ["src", "test"],
-  "exclude": ["node_modules", "dist"],
+  "include": ["src/**/**/*.ts", "test"],
+  "exclude": ["src/databases/migrations/*"]
 }

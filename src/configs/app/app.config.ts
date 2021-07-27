@@ -1,5 +1,7 @@
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+@Injectable()
 export class AppConfig {
   constructor(private configService: ConfigService) {}
 

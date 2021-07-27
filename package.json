@@ -25,7 +25,8 @@
     "db:migration:generate": "yarn build && ts-node node_modules/typeorm/cli.js migration:generate -f ormconfig -d src/databases/migrations -n",
     "db:migration:revert": "ts-node node_modules/typeorm/cli.js migration:revert -f ormconfig",
     "db:migration:create": "ts-node node_modules/typeorm/cli.js migration:create -f ormconfig -d src/databases/migrations -n",
-    "db:migration:run": "ts-node node_modules/typeorm/cli.js migration:run"
+    "db:migration:run": "ts-node node_modules/typeorm/cli.js migration:run",
+    "compodoc": "node_modules/.bin/compodoc -p tsconfig.json -w -s --port=8080"
   },
   "dependencies": {
     "@nestjs-architects/typed-cqrs": "^0.1.1",
@@ -52,6 +53,7 @@
     "typeorm": "^0.2.34"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.14",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
@@ -100,14 +102,13 @@
   },
   "homepage": "https://github.com/tranducminh/generate-nest-boilerplate#readme",
   "keys": [
-    "generator",
-    "boilerplate",
+    "nestjs-boilerplate",
     "nestjs",
     "nest",
-    "typescript",
-    "node",
     "nodejs",
-    "starter",
-    "cli"
+    "node",
+    "generator",
+    "boilerplate",
+    "typescript"
   ]
 }
