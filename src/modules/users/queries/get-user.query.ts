@@ -1,8 +1,14 @@
 import { UserEntity } from '@modules/users/entities/user.entity';
 import { UserRepository } from '@modules/users/repositories/user.repository';
+import { Query } from '@nestjs-architects/typed-cqrs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { GetUserQuery } from '../impl/get-user.query';
+
+export class GetUserQuery extends Query<UserEntity> {
+  constructor(public readonly id: number) {
+    super();
+  }
+}
 
 @QueryHandler(GetUserQuery)
 export class GetUserHandler implements IQueryHandler<GetUserQuery, UserEntity> {

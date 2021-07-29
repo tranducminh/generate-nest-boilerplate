@@ -1,10 +1,11 @@
 import { BaseEntity } from '@base/entities/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
 import { UserDto } from '../dtos/user.dto';
+import { UserTokenEntity } from './user-token.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity<UserDto> {
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -15,6 +16,10 @@ export class UserEntity extends BaseEntity<UserDto> {
 
   @Column({ nullable: true })
   avatar?: string;
+
+  @OneToMany(() => UserTokenEntity, (ut) => ut.user, { cascade: true })
+  @JoinColumn({ name: 'user_id' })
+  userTokens: UserTokenEntity[];
 
   dtoClass = UserDto;
 }

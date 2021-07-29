@@ -22,8 +22,11 @@ import {
   ApiMultipleDataResponse,
   ApiSingleDataResponse,
 } from '@common/decorators/api-response.decorator';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '@guards/auth.guard';
 
 @ApiTags('Users')
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController implements IUsersController {
   constructor(private readonly usersService: UsersService) {}

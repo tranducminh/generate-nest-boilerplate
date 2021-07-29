@@ -1,7 +1,13 @@
 import { UserRepository } from '@modules/users/repositories/user.repository';
+import { Command } from '@nestjs-architects/typed-cqrs';
 import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { RemoveUserCommand } from '../impl/remove-user.command';
+
+export class RemoveUserCommand extends Command<void> {
+  constructor(public readonly id: number) {
+    super();
+  }
+}
 
 @CommandHandler(RemoveUserCommand)
 export class RemoveUserHandler

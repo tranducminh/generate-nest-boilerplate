@@ -1,12 +1,12 @@
-import { BaseEntityDto } from '@base/dtos/base-entity.dto';
 import { PaginationDto } from '@common/dtos/pagination.dto';
 import { SuccessStatus } from '@common/constants/success-status.constant';
 import { HttpStatus, Type } from '@nestjs/common';
 import { applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 import { isSuccessHttpStatus } from '@utils/index';
+import { BaseDto } from '@base/dtos/base.dto';
 
-export const ApiSingleDataResponse = <T extends Type<BaseEntityDto>>(
+export const ApiSingleDataResponse = <T extends Type<BaseDto>>(
   dto: T,
   status: HttpStatus = HttpStatus.OK
 ) => {
@@ -35,7 +35,7 @@ export const ApiSingleDataResponse = <T extends Type<BaseEntityDto>>(
   );
 };
 
-export const ApiMultipleDataResponse = <T extends Type<BaseEntityDto>>(
+export const ApiMultipleDataResponse = <T extends Type<BaseDto>>(
   dto: T,
   status: HttpStatus = HttpStatus.OK
 ) => {

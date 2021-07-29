@@ -1,9 +1,8 @@
 import { BaseEntity } from '@base/entities/base.entity';
-import { ResponseDto } from '@common/dtos/response.dto';
-import { HttpStatus } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { BaseDto } from './base.dto';
 
-export class BaseEntityDto {
+export class BaseEntityDto extends BaseDto {
   @ApiProperty()
   id: number;
 
@@ -14,15 +13,13 @@ export class BaseEntityDto {
   updatedAt?: Date;
 
   constructor(entity: BaseEntity) {
+    super();
+
     this.id = entity.id;
     this.createdAt = entity.createdAt;
     if (entity.updatedAt) {
       this.updatedAt = entity.updatedAt;
     }
-  }
-
-  toResponse(status?: HttpStatus, message?: string) {
-    return new ResponseDto({ data: this, status, message });
   }
 }
 

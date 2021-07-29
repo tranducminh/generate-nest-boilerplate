@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from '../commands/impl/create-user.command';
-import { RemoveUserCommand } from '../commands/impl/remove-user.command';
-import { UpdateUserCommand } from '../commands/impl/update-user.command';
+import { CreateUserCommand } from '../commands/create-user.command';
+import { RemoveUserCommand } from '../commands/remove-user.command';
+import { UpdateUserCommand } from '../commands/update-user.command';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UserFilterDto } from '../dtos/user-filter.dto';
 import { UserDto } from '../dtos/user.dto';
 import { IUsersService } from '../interfaces/users.service.interface';
-import { GetAllUserQuery } from '../queries/impl/get-all-user.query';
-import { GetUserQuery } from '../queries/impl/get-user.query';
+import { GetAllUserQuery } from '../queries/get-all-user.query';
+import { GetUserQuery } from '../queries/get-user.query';
 
 @Injectable()
 export class UsersService implements IUsersService {
