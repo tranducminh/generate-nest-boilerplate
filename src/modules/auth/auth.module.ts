@@ -9,6 +9,7 @@ import { AppConfig } from '@configs/app/app.config';
 import { CreateTokenHandler } from './commands/create-token.command';
 import { LoginLocalHandler } from './commands/login-local.command';
 import { SignupLocalHandler } from './commands/signup-local.command';
+import { PassportModule } from '@nestjs/passport';
 
 const AuthCommandHandlers = [
   CreateTokenHandler,
@@ -19,6 +20,7 @@ const AuthCommandHandlers = [
 @Module({
   imports: [
     CqrsModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [MainConfigModule],
       useFactory: (appConfig: AppConfig) => {

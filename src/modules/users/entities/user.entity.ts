@@ -1,4 +1,4 @@
-import { BaseEntity } from '@base/entities/base.entity';
+import { BaseEntity } from '@base/entities/base-entity';
 import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
 import { UserDto } from '../dtos/user.dto';
 import { UserTokenEntity } from './user-token.entity';

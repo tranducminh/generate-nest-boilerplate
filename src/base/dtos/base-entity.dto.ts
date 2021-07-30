@@ -1,8 +1,10 @@
-import { BaseEntity } from '@base/entities/base.entity';
+import { AbstractBaseEntityDto } from '@base/dtos/base-entity.dto.abstract';
+import { AbstractBaseEntity } from '@base/entities/base-entity.abstract';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { BaseDto } from './base.dto';
 
-export class BaseEntityDto extends BaseDto {
+export class BaseEntityDto<
+  T extends AbstractBaseEntity = AbstractBaseEntity
+> extends AbstractBaseEntityDto {
   @ApiProperty()
   id: number;
 
@@ -12,7 +14,7 @@ export class BaseEntityDto extends BaseDto {
   @ApiPropertyOptional()
   updatedAt?: Date;
 
-  constructor(entity: BaseEntity) {
+  constructor(entity: T) {
     super();
 
     this.id = entity.id;
@@ -22,9 +24,3 @@ export class BaseEntityDto extends BaseDto {
     }
   }
 }
-
-// export type StrictType<T, TExpected> = T extends TExpected
-//   ? Exclude<keyof T, keyof TExpected> extends never
-//     ? T
-//     : TExpected
-//   : never;

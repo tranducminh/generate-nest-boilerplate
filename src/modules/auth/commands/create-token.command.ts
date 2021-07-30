@@ -1,9 +1,11 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 import * as uuid from 'uuid';
 import { AppConfig } from '@configs/app/app.config';
 import { Command } from '@nestjs-architects/typed-cqrs';
 import { UserEntity } from '@modules/users/entities/user.entity';
+import { CreateUserTokenCommand } from '@modules/users/commands/create-user-token.command';
+import { RemoveIatRecordCommand } from '@modules/users/commands/remove-iat-record.command';
 
 export class CreateTokenCommand extends Command<string> {
   constructor(public readonly user: UserEntity) {
@@ -17,7 +19,8 @@ export class CreateTokenHandler
 {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly appConfig: AppConfig
+    private readonly appConfig: AppConfig,
+    private readonly commandBus: CommandBus
   ) {}
 
   async execute(command: CreateTokenCommand): Promise<string> {
@@ -33,6 +36,14 @@ export class CreateTokenHandler
         expiresIn: this.appConfig.get('JWT_EXPIRED_TIME'),
       }
     );
+
+    const { iat, exp } = this.jwtService.verify(accessToken);
+
+    await this.commandBus.execute(
+      new CreateUserTokenCommand({ userId: user.id, iat, exp })
+    );
+
+    await this.commandBus.execute(new RemoveIatRecordCommand([user.id]));
 
     return accessToken;
   }

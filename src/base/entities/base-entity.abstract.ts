@@ -1,4 +1,3 @@
-import { BaseEntityDto } from '@base/dtos/base-entity.dto';
 import {
   Column,
   CreateDateColumn,
@@ -7,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export abstract class BaseEntity<T extends BaseEntityDto = BaseEntityDto> {
+export abstract class AbstractBaseEntity {
   @PrimaryGeneratedColumn({ type: 'integer' })
   id: number;
 
@@ -28,10 +27,4 @@ export abstract class BaseEntity<T extends BaseEntityDto = BaseEntityDto> {
 
   @Column({ nullable: true })
   deletedById?: number;
-
-  abstract dtoClass: new (entity: BaseEntity) => T;
-
-  toDto(): T {
-    return new this.dtoClass(this);
-  }
 }

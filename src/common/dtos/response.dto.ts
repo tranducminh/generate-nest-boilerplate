@@ -1,10 +1,12 @@
-import { BaseDto } from '@base/dtos/base.dto';
+import { AbstractBaseEntityDto } from '@base/dtos/base-entity.dto.abstract';
 import { PaginationDto } from '@common/dtos/pagination.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { isSuccessHttpStatus } from '@utils/index';
 
-export class ResponseDto<D extends BaseDto | BaseDto[] | null> {
+export class ResponseDto<
+  D extends AbstractBaseEntityDto | AbstractBaseEntityDto[] | null
+> {
   @ApiPropertyOptional()
   data?: D;
 

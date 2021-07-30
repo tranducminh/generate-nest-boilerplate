@@ -4,9 +4,9 @@ import { HttpStatus, Type } from '@nestjs/common';
 import { applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 import { isSuccessHttpStatus } from '@utils/index';
-import { BaseDto } from '@base/dtos/base.dto';
+import { AbstractBaseEntityDto } from '@base/dtos/base-entity.dto.abstract';
 
-export const ApiSingleDataResponse = <T extends Type<BaseDto>>(
+export const ApiSingleDataResponse = <T extends Type<AbstractBaseEntityDto>>(
   dto: T,
   status: HttpStatus = HttpStatus.OK
 ) => {
@@ -35,7 +35,7 @@ export const ApiSingleDataResponse = <T extends Type<BaseDto>>(
   );
 };
 
-export const ApiMultipleDataResponse = <T extends Type<BaseDto>>(
+export const ApiMultipleDataResponse = <T extends Type<AbstractBaseEntityDto>>(
   dto: T,
   status: HttpStatus = HttpStatus.OK
 ) => {

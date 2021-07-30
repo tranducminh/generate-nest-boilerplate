@@ -1,8 +1,8 @@
-import { BaseDto } from '@base/dtos/base.dto';
+import { AbstractBaseEntityDto } from '@base/dtos/base-entity.dto.abstract';
 import { UserDto } from '@modules/users/dtos/user.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AuthDto extends BaseDto {
+export class AuthDto extends AbstractBaseEntityDto {
   @ApiProperty({ type: UserDto })
   user: UserDto;
 

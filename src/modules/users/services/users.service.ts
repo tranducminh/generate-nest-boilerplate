@@ -1,3 +1,4 @@
+import { MultipleEntityDto } from '@common/dtos/multiple-entity.dto';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../commands/create-user.command';
@@ -26,12 +27,12 @@ export class UsersService implements IUsersService {
     return user.toDto();
   }
 
-  async findAll(filter: UserFilterDto): Promise<UserDto[]> {
+  async findAll(filter: UserFilterDto): Promise<MultipleEntityDto<UserDto>> {
     const query = new GetAllUserQuery(filter);
 
     const users = await this.queryBus.execute(query);
 
-    return users.toDtos();
+    return users.toDto();
   }
 
   async findOne(id: number): Promise<UserDto> {
