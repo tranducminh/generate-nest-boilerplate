@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { AuthGuard } from '@nestjs/passport';
-import { isBoolean } from 'lodash';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -16,17 +15,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    let next = false;
-
     const validate = await super.canActivate(context);
 
-    if (isBoolean(validate)) {
-      next = validate;
-    } else {
-      next = (await validate.toPromise()) || false;
-    }
-
-    if (!next) throw new UnauthorizedException();
+    if (!validate) throw new UnauthorizedException();
 
     const user: JwtClaimDto = context.getArgs()[0].user;
 

@@ -13,9 +13,10 @@ import { GetUserByEmailHandler } from './queries/get-user-by-email.query';
 import { GetIatRecordHandler } from './queries/get-iat-record.query';
 import { CreateUserTokenHandler } from './commands/create-user-token.command';
 import { RemoveUserTokenHandler } from './commands/remove-user-token.command';
-import { CreateIatRecordHandler } from './commands/create-iat-record.command';
 import { RemoveIatRecordHandler } from './commands/remove-iat-record.command';
 import { UserTokenRepository } from './repositories/user-token.repository';
+import { GetPermissionRecordHandler } from './queries/get-permission-record.query';
+import { RemovePermissionRecordHandler } from './commands/remove-permission-record.command';
 
 const UsersCommandHandlers = [
   CreateUserHandler,
@@ -23,8 +24,8 @@ const UsersCommandHandlers = [
   RemoveUserHandler,
   CreateUserTokenHandler,
   RemoveUserTokenHandler,
-  CreateIatRecordHandler,
   RemoveIatRecordHandler,
+  RemovePermissionRecordHandler,
 ];
 
 const UsersQueryHandlers = [
@@ -32,6 +33,7 @@ const UsersQueryHandlers = [
   GetALlUserHandler,
   GetUserByEmailHandler,
   GetIatRecordHandler,
+  GetPermissionRecordHandler,
 ];
 
 @Module({

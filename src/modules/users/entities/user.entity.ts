@@ -17,6 +17,9 @@ export class UserEntity extends BaseEntity<UserDto> {
   @Column({ nullable: true })
   avatar?: string;
 
+  @Column({ type: 'simple-array' })
+  permissions: string[];
+
   @OneToMany(() => UserTokenEntity, (ut) => ut.user, { cascade: true })
   @JoinColumn({ name: 'user_id' })
   userTokens: UserTokenEntity[];

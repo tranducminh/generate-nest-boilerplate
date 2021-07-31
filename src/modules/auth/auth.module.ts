@@ -10,11 +10,13 @@ import { CreateTokenHandler } from './commands/create-token.command';
 import { LoginLocalHandler } from './commands/login-local.command';
 import { SignupLocalHandler } from './commands/signup-local.command';
 import { PassportModule } from '@nestjs/passport';
+import { LogoutLocalHandler } from './commands/logout-local.command';
 
 const AuthCommandHandlers = [
   CreateTokenHandler,
   LoginLocalHandler,
   SignupLocalHandler,
+  LogoutLocalHandler,
 ];
 
 @Module({

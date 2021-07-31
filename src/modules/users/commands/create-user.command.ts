@@ -1,3 +1,4 @@
+import { Role, User } from '@common/constants/permission.const';
 import { UserEntity } from '@modules/users/entities/user.entity';
 import { UserRepository } from '@modules/users/repositories/user.repository';
 import { Command } from '@nestjs-architects/typed-cqrs';
@@ -28,6 +29,7 @@ export class CreateUserHandler
     const newUser = this.userRepository.create({
       ...data,
       password: generateHash(data.password),
+      permissions: [Role.USER, User.READ],
     });
 
     return await this.userRepository.save(newUser);

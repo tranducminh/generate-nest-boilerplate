@@ -1,4 +1,3 @@
-import './common/global/tsarray';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,

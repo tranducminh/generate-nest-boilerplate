@@ -1,10 +1,16 @@
-import { ApiSingleDataResponse } from '@common/decorators/api-response.decorator';
-import { ResponseDto } from '@common/dtos/response.dto';
-import { Body, Post } from '@nestjs/common';
+import {
+  ApiEmptyDataResponse,
+  ApiSingleDataResponse,
+} from '@common/decorators/api-response.decorator';
+import { AuthUser } from '@common/decorators/auth-user.decorator';
+import { generateEmptyRes, ResponseDto } from '@common/dtos/response.dto';
+import { JwtAuthGuard } from '@guards/auth.guard';
+import { Body, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthDto } from '../dtos/auth.dto';
 import { LoginLocalDto } from '../dtos/login-local.dto';
+import { LogoutLocalDto } from '../dtos/logout-local.dto';
 import { SignupLocalDto } from '../dtos/signup-local.dto';
 import { IAuthController } from '../interfaces/auth.controller.interface';
 import { AuthService } from '../services/auth.service';
@@ -14,7 +20,7 @@ import { AuthService } from '../services/auth.service';
 export class AuthController implements IAuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/login')
+  @Post('login')
   @ApiSingleDataResponse(AuthDto)
   async login(@Body() data: LoginLocalDto): Promise<ResponseDto<AuthDto>> {
     const auth = await this.authService.login(data);
@@ -28,5 +34,14 @@ export class AuthController implements IAuthController {
     const auth = await this.authService.signup(data);
 
     return auth.toResponse();
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  @ApiEmptyDataResponse()
+  async logout(@AuthUser() data: LogoutLocalDto): Promise<ResponseDto<null>> {
+    await this.authService.logout(data);
+
+    return generateEmptyRes(HttpStatus.OK, `Logout successfully`);
   }
 }

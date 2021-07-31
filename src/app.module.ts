@@ -12,17 +12,17 @@ import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
-    // by default limit 10 requests in 60s
+    // by default limit 100 requests in 60s
     ThrottlerModule.forRoot({
       ttl: 60,
-      limit: 10,
+      limit: 100,
     }),
     ConfigModule.forRoot({
       envFilePath: [
-        '.env.production',
+        '.env',
         '.env.development',
         '.env.staging',
-        '.env',
+        '.env.production',
       ],
       isGlobal: true,
     }),

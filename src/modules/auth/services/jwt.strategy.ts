@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate({ id, iat }: { id: number; iat: number }) {
-    return new JwtClaimDto(id, iat);
+  async validate({ id, iat, exp }: { id: number; iat: number; exp: number }) {
+    return new JwtClaimDto(id, iat, exp);
   }
 }

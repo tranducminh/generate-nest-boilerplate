@@ -24,14 +24,18 @@ import {
 } from '@common/decorators/api-response.decorator';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@guards/auth.guard';
+import { Permissions } from '@common/decorators/permissions.decorator';
+import { Role, User } from '@common/constants/permission.const';
+import { PermissionGuard } from '@guards/permission.guard';
 
-@ApiTags('Users')
-@UseGuards(JwtAuthGuard)
 @Controller('users')
+@UseGuards(JwtAuthGuard, PermissionGuard)
+@ApiTags('Users')
 export class UsersController implements IUsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @Permissions(Role.ADMIN, User.CREATE)
   @ApiSingleDataResponse(UserDto)
   async create(
     @Body() createUserDto: CreateUserDto
@@ -42,6 +46,7 @@ export class UsersController implements IUsersController {
   }
 
   @Get()
+  @Permissions(User.READ)
   @ApiMultipleDataResponse(UserDto)
   async findAll(
     @Query() filter: UserFilterDto
@@ -52,6 +57,7 @@ export class UsersController implements IUsersController {
   }
 
   @Get(':id')
+  @Permissions(User.READ)
   @ApiSingleDataResponse(UserDto)
   async findOne(@Param('id') id: number): Promise<ResponseDto<UserDto>> {
     const user = await this.usersService.findOne(id);
@@ -60,6 +66,7 @@ export class UsersController implements IUsersController {
   }
 
   @Patch(':id')
+  @Permissions(Role.ADMIN, User.UPDATE)
   @ApiEmptyDataResponse()
   async update(
     @Param('id') id: number,
@@ -71,6 +78,7 @@ export class UsersController implements IUsersController {
   }
 
   @Delete(':id')
+  @Permissions(Role.ADMIN, User.DELETE)
   @ApiEmptyDataResponse()
   async remove(@Param('id') id: number): Promise<ResponseDto<null>> {
     await this.usersService.remove(id);
