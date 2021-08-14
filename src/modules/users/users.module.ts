@@ -17,6 +17,8 @@ import { RemoveIatRecordHandler } from './commands/remove-iat-record.command';
 import { UserTokenRepository } from './repositories/user-token.repository';
 import { GetPermissionRecordHandler } from './queries/get-permission-record.query';
 import { RemovePermissionRecordHandler } from './commands/remove-permission-record.command';
+import { UsersAdminController } from './controllers/users.admin.controller';
+import { UsersAdminService } from './services/users.admin.service';
 
 const UsersCommandHandlers = [
   CreateUserHandler,
@@ -41,7 +43,12 @@ const UsersQueryHandlers = [
     CqrsModule,
     TypeOrmModule.forFeature([UserRepository, UserTokenRepository]),
   ],
-  controllers: [UsersController],
-  providers: [UsersService, ...UsersCommandHandlers, ...UsersQueryHandlers],
+  controllers: [UsersController, UsersAdminController],
+  providers: [
+    UsersService,
+    UsersAdminService,
+    ...UsersCommandHandlers,
+    ...UsersQueryHandlers,
+  ],
 })
 export class UsersModule {}

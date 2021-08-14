@@ -3,9 +3,12 @@ import { UserRepository } from '@modules/users/repositories/user.repository';
 import { Query } from '@nestjs-architects/typed-cqrs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { UserFilterDto } from '../dtos/user-filter.dto';
+import { UserAdminDto } from '../dtos/user.admin.dto';
 import { UserDto } from '../dtos/user.dto';
 
-export class GetAllUserQuery extends Query<MultipleEntity<UserDto>> {
+export class GetAllUserQuery extends Query<
+  MultipleEntity<UserDto, UserAdminDto>
+> {
   constructor(public readonly filter: UserFilterDto) {
     super();
   }
@@ -13,7 +16,7 @@ export class GetAllUserQuery extends Query<MultipleEntity<UserDto>> {
 
 @QueryHandler(GetAllUserQuery)
 export class GetALlUserHandler
-  implements IQueryHandler<GetAllUserQuery, MultipleEntity<UserDto>>
+  implements IQueryHandler<GetAllUserQuery, MultipleEntity>
 {
   constructor(private readonly userRepository: UserRepository) {}
 

@@ -7,7 +7,7 @@ import { generateEmptyRes, ResponseDto } from '@common/dtos/response.dto';
 import { JwtAuthGuard } from '@guards/auth.guard';
 import { Body, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthDto } from '../dtos/auth.dto';
 import { LoginLocalDto } from '../dtos/login-local.dto';
 import { LogoutLocalDto } from '../dtos/logout-local.dto';
@@ -38,6 +38,7 @@ export class AuthController implements IAuthController {
 
   @Post('logout')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiEmptyDataResponse()
   async logout(@AuthUser() data: LogoutLocalDto): Promise<ResponseDto<null>> {
     await this.authService.logout(data);

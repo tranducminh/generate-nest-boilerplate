@@ -1,10 +1,15 @@
 import { BaseEntity } from '@base/entities/base-entity';
+import { Permission } from '@common/constants/permission.const';
 import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
+import { UserAdminDto } from '../dtos/user.admin.dto';
 import { UserDto } from '../dtos/user.dto';
 import { UserTokenEntity } from './user-token.entity';
 
 @Entity('users')
-export class UserEntity extends BaseEntity<UserDto> {
+export class UserEntity extends BaseEntity<UserDto, UserAdminDto> {
+  dtoClass = UserDto;
+  adminDtoClass = UserAdminDto;
+
   @Column({ unique: true })
   email: string;
 
@@ -18,11 +23,9 @@ export class UserEntity extends BaseEntity<UserDto> {
   avatar?: string;
 
   @Column({ type: 'simple-array' })
-  permissions: string[];
+  permissions: Permission[];
 
   @OneToMany(() => UserTokenEntity, (ut) => ut.user, { cascade: true })
   @JoinColumn({ name: 'user_id' })
   userTokens: UserTokenEntity[];
-
-  dtoClass = UserDto;
 }

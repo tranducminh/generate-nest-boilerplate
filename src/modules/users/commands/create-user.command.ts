@@ -5,10 +5,11 @@ import { Command } from '@nestjs-architects/typed-cqrs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { generateHash } from '@utils/index';
+import { CreateUserAdminDto } from '../dtos/create-user.admin.dto';
 import { CreateUserDto } from '../dtos/create-user.dto';
 
 export class CreateUserCommand extends Command<UserEntity> {
-  constructor(public readonly data: CreateUserDto) {
+  constructor(public readonly data: CreateUserDto | CreateUserAdminDto) {
     super();
   }
 }
@@ -32,6 +33,6 @@ export class CreateUserHandler
       permissions: [Role.USER, User.READ],
     });
 
-    return await this.userRepository.save(newUser);
+    return this.userRepository.save(newUser);
   }
 }

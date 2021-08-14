@@ -1,3 +1,5 @@
+export type Permission = User | Role;
+
 export enum Role {
   SUPER_ADMIN = 'super-admin',
   ADMIN = 'admin',

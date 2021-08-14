@@ -29,10 +29,8 @@ export class PermissionGuard implements CanActivate {
 
     if (permissions.includes(Role.SUPER_ADMIN)) return true;
 
-    const hasPermission = requiredPermissions.every((requiredPermission) =>
+    return requiredPermissions.every((requiredPermission) =>
       permissions.includes(requiredPermission)
     );
-
-    return hasPermission;
   }
 }
