@@ -1,9 +1,9 @@
-import { Permission } from '@common/constants/permission.const';
 import { UserRepository } from '@modules/users/repositories/user.repository';
 import { Command } from '@nestjs-architects/typed-cqrs';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateUserAdminDto } from '../dtos/update-user.admin.dto';
+import { CheckModifyPermissionsPossibilityCommand } from './check-modify-permissons-possibility.command';
 import { RemovePermissionRecordCommand } from './remove-permission-record.command';
 import { RemoveUserStatusRecordCommand } from './remove-user-status-record.command';
 
@@ -34,16 +34,12 @@ export class UpdateUserAdminHandler
     if (!user) throw new NotFoundException('User not existed');
 
     if (data.permissions) {
-      const createByUser = await this.userRepository.findOne(updateById);
-
-      if (
-        !this.isAllowedUpdatePermissions(
-          data.permissions,
-          createByUser?.permissions
+      await this.commandBus.execute(
+        new CheckModifyPermissionsPossibilityCommand(
+          updateById,
+          data.permissions
         )
-      ) {
-        throw new ForbiddenException('Not allowed to update this permissions');
-      }
+      );
 
       await this.commandBus.execute(
         new RemovePermissionRecordCommand([user.id])
@@ -57,20 +53,5 @@ export class UpdateUserAdminHandler
     }
 
     this.userRepository.update(id, data);
-  }
-
-  isAllowedUpdatePermissions(
-    permissions: Permission[] = [],
-    updateByUserPermissions: Permission[] = []
-  ): boolean {
-    if (updateByUserPermissions.includes(Permission.SUPER_ADMIN)) return true;
-
-    if (
-      permissions.includes(Permission.SUPER_ADMIN) ||
-      permissions.includes(Permission.ADMIN)
-    )
-      return false;
-
-    return true;
   }
 }

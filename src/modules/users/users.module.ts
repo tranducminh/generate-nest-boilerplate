@@ -23,18 +23,22 @@ import { GetUserStatusRecordHandler } from './queries/get-user-status-record.que
 import { RemoveUserStatusRecordHandler } from './commands/remove-user-status-record.command';
 import { UpdateUserAdminHandler } from './commands/update-user.admin.command';
 import { CreateUserAdminHandler } from './commands/create-user.admin.command';
+import { CheckModifyPermissionsPossibilityHandler } from './commands/check-modify-permissons-possibility.command';
+import { UpdateUserLocalHandler } from './commands/update-user.local.command';
 
 const UsersCommandHandlers = [
   CreateUserHandler,
   CreateUserAdminHandler,
   UpdateUserHandler,
   UpdateUserAdminHandler,
+  UpdateUserLocalHandler,
   RemoveUserAdminHandler,
   CreateUserTokenHandler,
   RemoveUserTokenHandler,
   RemoveIatRecordHandler,
   RemovePermissionRecordHandler,
   RemoveUserStatusRecordHandler,
+  CheckModifyPermissionsPossibilityHandler,
 ];
 
 const UsersQueryHandlers = [

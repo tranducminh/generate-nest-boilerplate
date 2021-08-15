@@ -1,10 +1,8 @@
-import { Permission } from '@common/constants/permission.const';
 import { UserEntity } from '@modules/users/entities/user.entity';
 import { UserRepository } from '@modules/users/repositories/user.repository';
 import { Command } from '@nestjs-architects/typed-cqrs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { generateHash } from '@utils/index';
 import { CreateUserDto } from '../dtos/create-user.dto';
 
 export class CreateUserCommand extends Command<UserEntity> {
@@ -26,11 +24,7 @@ export class CreateUserHandler
 
     if (existUser) throw new BadRequestException('User already exists');
 
-    const newUser = this.userRepository.create({
-      ...data,
-      password: generateHash(data.password),
-      permissions: [Permission.USER, Permission.USER_READ],
-    });
+    const newUser = this.userRepository.create(data);
 
     return this.userRepository.save(newUser);
   }

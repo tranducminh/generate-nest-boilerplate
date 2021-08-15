@@ -1,11 +1,11 @@
-import { Permission } from '@common/constants/permission.const';
 import { UserEntity } from '@modules/users/entities/user.entity';
 import { UserRepository } from '@modules/users/repositories/user.repository';
 import { Command } from '@nestjs-architects/typed-cqrs';
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { generateHash, isRealEmail } from '@utils/index';
+import { BadRequestException } from '@nestjs/common';
+import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { isRealEmail } from '@utils/index';
 import { CreateUserAdminDto } from '../dtos/create-user.admin.dto';
+import { CheckModifyPermissionsPossibilityCommand } from './check-modify-permissons-possibility.command';
 
 export class CreateUserAdminCommand extends Command<UserEntity> {
   constructor(
@@ -20,7 +20,10 @@ export class CreateUserAdminCommand extends Command<UserEntity> {
 export class CreateUserAdminHandler
   implements ICommandHandler<CreateUserAdminCommand, UserEntity>
 {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userRepository: UserRepository,
+    private readonly commandBus: CommandBus
+  ) {}
 
   async execute(command: CreateUserAdminCommand): Promise<UserEntity> {
     const { createById, data } = command;
@@ -33,37 +36,12 @@ export class CreateUserAdminHandler
       throw new BadRequestException('Email address is not exist');
     }
 
-    const createByUser = await this.userRepository.findOne(createById);
+    await this.commandBus.execute(
+      new CheckModifyPermissionsPossibilityCommand(createById, data.permissions)
+    );
 
-    if (
-      !this.isAllowedCreatePermissions(
-        data.permissions,
-        createByUser?.permissions
-      )
-    ) {
-      throw new ForbiddenException('Not allowed to create this permissions');
-    }
-
-    const newUser = this.userRepository.create({
-      ...data,
-      password: generateHash(data.password),
-    });
+    const newUser = this.userRepository.create(data);
 
     return this.userRepository.save(newUser);
-  }
-
-  isAllowedCreatePermissions(
-    permissions: Permission[] = [],
-    createByUserPermissions: Permission[] = []
-  ): boolean {
-    if (createByUserPermissions.includes(Permission.SUPER_ADMIN)) return true;
-
-    if (
-      permissions.includes(Permission.SUPER_ADMIN) ||
-      permissions.includes(Permission.ADMIN)
-    )
-      return false;
-
-    return true;
   }
 }

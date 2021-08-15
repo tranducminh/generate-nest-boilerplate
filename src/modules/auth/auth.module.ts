@@ -11,12 +11,16 @@ import { LoginLocalHandler } from './commands/login-local.command';
 import { SignupLocalHandler } from './commands/signup-local.command';
 import { PassportModule } from '@nestjs/passport';
 import { LogoutLocalHandler } from './commands/logout-local.command';
+import { ActivateAccountHandler } from './commands/activate-account.command';
+import { RequestActivateAccountHandler } from './commands/request-activate-account.command';
 
 const AuthCommandHandlers = [
   CreateTokenHandler,
   LoginLocalHandler,
   SignupLocalHandler,
   LogoutLocalHandler,
+  ActivateAccountHandler,
+  RequestActivateAccountHandler,
 ];
 
 @Module({
