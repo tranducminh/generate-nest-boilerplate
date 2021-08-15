@@ -6,5 +6,8 @@ import { UserDto } from '../dtos/user.dto';
 export interface IUsersController {
   findOne(authUser: JwtClaimDto): Promise<ResponseDto<UserDto>>;
 
-  update(id: number, data: UpdateUserDto): Promise<ResponseDto<null>>;
+  update(
+    data: UpdateUserDto,
+    authUser: JwtClaimDto
+  ): Promise<ResponseDto<null>>;
 }

@@ -8,7 +8,7 @@ import { In } from 'typeorm';
 
 interface IRemoveUserToken {
   userId: number;
-  iats: number[];
+  iats?: number[];
 }
 
 export class RemoveUserTokenCommand extends Command<void> {
@@ -26,6 +26,10 @@ export class RemoveUserTokenHandler
   async execute(command: RemoveUserTokenCommand): Promise<void> {
     const { userId, iats } = command.removeUserToken;
 
-    await this.userTokenRepository.delete({ userId, iat: In(iats) });
+    if (iats?.length) {
+      await this.userTokenRepository.delete({ userId, iat: In(iats) });
+    } else {
+      await this.userTokenRepository.delete({ userId });
+    }
   }
 }

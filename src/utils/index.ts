@@ -1,6 +1,7 @@
 import { SuccessStatus } from '@common/constants/success-status.constant';
 import { HttpStatus } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import * as emailExistence from 'email-existence';
 
 /**
  *
@@ -43,4 +44,18 @@ export async function isMatchedHash(
   hash: string
 ): Promise<boolean> {
   return await bcrypt.compare(origin, hash);
+}
+
+/**
+ *
+ * @param email
+ * @returns {boolean}
+ */
+export function isRealEmail(email: string): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    emailExistence.check(email, function (error, response) {
+      if (error) reject(error);
+      resolve(response);
+    });
+  });
 }

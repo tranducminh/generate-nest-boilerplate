@@ -5,8 +5,8 @@ import {
 import { AuthUser } from '@common/decorators/auth-user.decorator';
 import { generateEmptyRes, ResponseDto } from '@common/dtos/response.dto';
 import { JwtAuthGuard } from '@guards/auth.guard';
-import { Body, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { Controller } from '@nestjs/common';
+import { UserStatusGuard } from '@guards/user-status.guard';
+import { Body, HttpStatus, Post, UseGuards, Controller } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthDto } from '../dtos/auth.dto';
 import { LoginLocalDto } from '../dtos/login-local.dto';
@@ -21,6 +21,7 @@ export class AuthController implements IAuthController {
   constructor(private authService: AuthService) {}
 
   @Post('login')
+  @UseGuards(UserStatusGuard)
   @ApiSingleDataResponse(AuthDto)
   async login(@Body() data: LoginLocalDto): Promise<ResponseDto<AuthDto>> {
     const auth = await this.authService.login(data);

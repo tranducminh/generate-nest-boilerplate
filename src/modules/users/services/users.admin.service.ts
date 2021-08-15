@@ -1,9 +1,9 @@
 import { MultipleEntityDto } from '@common/dtos/multiple-entity.dto';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from '../commands/create-user.command';
-import { RemoveUserCommand } from '../commands/remove-user.command';
-import { UpdateUserCommand } from '../commands/update-user.command';
+import { CreateUserAdminCommand } from '../commands/create-user.admin.command';
+import { RemoveUserAdminCommand } from '../commands/remove-user.admin.command';
+import { UpdateUserAdminCommand } from '../commands/update-user.admin.command';
 import { CreateUserAdminDto } from '../dtos/create-user.admin.dto';
 import { UpdateUserAdminDto } from '../dtos/update-user.admin.dto';
 import { UserFilterDto } from '../dtos/user-filter.dto';
@@ -19,8 +19,11 @@ export class UsersAdminService implements IUsersAdminService {
     private readonly queryBus: QueryBus
   ) {}
 
-  async create(data: CreateUserAdminDto): Promise<UserAdminDto> {
-    const command = new CreateUserCommand(data);
+  async create(
+    data: CreateUserAdminDto,
+    createById: number
+  ): Promise<UserAdminDto> {
+    const command = new CreateUserAdminCommand(createById, data);
 
     const user = await this.commandBus.execute(command);
 
@@ -45,14 +48,18 @@ export class UsersAdminService implements IUsersAdminService {
     return user.toAdminDto();
   }
 
-  async update(id: number, data: UpdateUserAdminDto): Promise<void> {
-    const command = new UpdateUserCommand(id, data);
+  async update(
+    id: number,
+    data: UpdateUserAdminDto,
+    updateById: number
+  ): Promise<void> {
+    const command = new UpdateUserAdminCommand(id, data, updateById);
 
     await this.commandBus.execute(command);
   }
 
-  async remove(id: number): Promise<void> {
-    const command = new RemoveUserCommand(id);
+  async remove(id: number, removeById: number): Promise<void> {
+    const command = new RemoveUserAdminCommand(id, removeById);
 
     await this.commandBus.execute(command);
   }

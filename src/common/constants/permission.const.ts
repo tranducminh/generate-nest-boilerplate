@@ -1,14 +1,10 @@
-export type Permission = User | Role;
-
-export enum Role {
+export enum Permission {
   SUPER_ADMIN = 'super-admin',
   ADMIN = 'admin',
   USER = 'user',
-}
 
-export enum User {
-  CREATE = 'user:create',
-  READ = 'user:read',
-  UPDATE = 'user:update',
-  DELETE = 'user:delete',
+  USER_CREATE = 'user:create',
+  USER_READ = 'user:read',
+  USER_UPDATE = 'user:update',
+  USER_DELETE = 'user:delete',
 }

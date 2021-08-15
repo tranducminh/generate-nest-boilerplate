@@ -5,13 +5,17 @@ import { UserFilterDto } from '../dtos/user-filter.dto';
 import { UserAdminDto } from '../dtos/user.admin.dto';
 
 export interface IUsersAdminService {
-  create(data: CreateUserAdminDto): Promise<UserAdminDto>;
+  create(data: CreateUserAdminDto, createById: number): Promise<UserAdminDto>;
 
   findAll(filter: UserFilterDto): Promise<MultipleEntityDto<UserAdminDto>>;
 
   findOne(id: number): Promise<UserAdminDto>;
 
-  update(id: number, data: UpdateUserAdminDto): Promise<void>;
+  update(
+    id: number,
+    data: UpdateUserAdminDto,
+    updateById: number
+  ): Promise<void>;
 
-  remove(id: number): Promise<void>;
+  remove(id: number, removeById: number): Promise<void>;
 }

@@ -1,4 +1,4 @@
-import { Role } from '@common/constants/permission.const';
+import { Permission } from '@common/constants/permission.const';
 import { PERMISSIONS_KEY } from '@common/decorators/permissions.decorator';
 import { JwtClaimDto } from '@common/dtos/jwt-claim.dto';
 import { GetPermissionRecordQuery } from '@modules/users/queries/get-permission-record.query';
@@ -27,7 +27,7 @@ export class PermissionGuard implements CanActivate {
       new GetPermissionRecordQuery(user.id)
     );
 
-    if (permissions.includes(Role.SUPER_ADMIN)) return true;
+    if (permissions.includes(Permission.SUPER_ADMIN)) return true;
 
     return requiredPermissions.every((requiredPermission) =>
       permissions.includes(requiredPermission)

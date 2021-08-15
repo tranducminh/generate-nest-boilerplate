@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from './repositories/user.repository';
 import { CreateUserHandler } from './commands/create-user.command';
 import { UpdateUserHandler } from './commands/update-user.command';
-import { RemoveUserHandler } from './commands/remove-user.command';
+import { RemoveUserAdminHandler } from './commands/remove-user.admin.command';
 import { GetALlUserHandler } from './queries/get-all-user.query';
 import { GetUserHandler } from './queries/get-user.query';
 import { GetUserByEmailHandler } from './queries/get-user-by-email.query';
@@ -19,15 +19,22 @@ import { GetPermissionRecordHandler } from './queries/get-permission-record.quer
 import { RemovePermissionRecordHandler } from './commands/remove-permission-record.command';
 import { UsersAdminController } from './controllers/users.admin.controller';
 import { UsersAdminService } from './services/users.admin.service';
+import { GetUserStatusRecordHandler } from './queries/get-user-status-record.query';
+import { RemoveUserStatusRecordHandler } from './commands/remove-user-status-record.command';
+import { UpdateUserAdminHandler } from './commands/update-user.admin.command';
+import { CreateUserAdminHandler } from './commands/create-user.admin.command';
 
 const UsersCommandHandlers = [
   CreateUserHandler,
+  CreateUserAdminHandler,
   UpdateUserHandler,
-  RemoveUserHandler,
+  UpdateUserAdminHandler,
+  RemoveUserAdminHandler,
   CreateUserTokenHandler,
   RemoveUserTokenHandler,
   RemoveIatRecordHandler,
   RemovePermissionRecordHandler,
+  RemoveUserStatusRecordHandler,
 ];
 
 const UsersQueryHandlers = [
@@ -36,6 +43,7 @@ const UsersQueryHandlers = [
   GetUserByEmailHandler,
   GetIatRecordHandler,
   GetPermissionRecordHandler,
+  GetUserStatusRecordHandler,
 ];
 
 @Module({

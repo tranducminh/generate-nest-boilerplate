@@ -1,0 +1,76 @@
+import { Permission } from '@common/constants/permission.const';
+import { UserRepository } from '@modules/users/repositories/user.repository';
+import { Command } from '@nestjs-architects/typed-cqrs';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { CommandBus, CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { UpdateUserAdminDto } from '../dtos/update-user.admin.dto';
+import { RemovePermissionRecordCommand } from './remove-permission-record.command';
+import { RemoveUserStatusRecordCommand } from './remove-user-status-record.command';
+
+export class UpdateUserAdminCommand extends Command<void> {
+  constructor(
+    public readonly id: number,
+    public readonly data: UpdateUserAdminDto,
+    public readonly updateById: number
+  ) {
+    super();
+  }
+}
+
+@CommandHandler(UpdateUserAdminCommand)
+export class UpdateUserAdminHandler
+  implements ICommandHandler<UpdateUserAdminCommand, void>
+{
+  constructor(
+    private userRepository: UserRepository,
+    private commandBus: CommandBus
+  ) {}
+
+  async execute(command: UpdateUserAdminCommand): Promise<void> {
+    const { id, data, updateById } = command;
+
+    const user = await this.userRepository.findOne(id);
+
+    if (!user) throw new NotFoundException('User not existed');
+
+    if (data.permissions) {
+      const createByUser = await this.userRepository.findOne(updateById);
+
+      if (
+        !this.isAllowedUpdatePermissions(
+          data.permissions,
+          createByUser?.permissions
+        )
+      ) {
+        throw new ForbiddenException('Not allowed to update this permissions');
+      }
+
+      await this.commandBus.execute(
+        new RemovePermissionRecordCommand([user.id])
+      );
+    }
+
+    if (data.status) {
+      await this.commandBus.execute(
+        new RemoveUserStatusRecordCommand([user.id])
+      );
+    }
+
+    this.userRepository.update(id, data);
+  }
+
+  isAllowedUpdatePermissions(
+    permissions: Permission[] = [],
+    updateByUserPermissions: Permission[] = []
+  ): boolean {
+    if (updateByUserPermissions.includes(Permission.SUPER_ADMIN)) return true;
+
+    if (
+      permissions.includes(Permission.SUPER_ADMIN) ||
+      permissions.includes(Permission.ADMIN)
+    )
+      return false;
+
+    return true;
+  }
+}

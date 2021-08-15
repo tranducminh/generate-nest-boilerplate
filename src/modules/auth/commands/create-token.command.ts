@@ -7,6 +7,7 @@ import { UserEntity } from '@modules/users/entities/user.entity';
 import { CreateUserTokenCommand } from '@modules/users/commands/create-user-token.command';
 import { RemoveIatRecordCommand } from '@modules/users/commands/remove-iat-record.command';
 import { RemovePermissionRecordCommand } from '@modules/users/commands/remove-permission-record.command';
+import { RemoveUserStatusRecordCommand } from '@modules/users/commands/remove-user-status-record.command';
 
 export class CreateTokenCommand extends Command<string> {
   constructor(public readonly user: UserEntity) {
@@ -47,6 +48,8 @@ export class CreateTokenHandler
     await this.commandBus.execute(new RemoveIatRecordCommand([user.id]));
 
     await this.commandBus.execute(new RemovePermissionRecordCommand([user.id]));
+
+    await this.commandBus.execute(new RemoveUserStatusRecordCommand([user.id]));
 
     return accessToken;
   }

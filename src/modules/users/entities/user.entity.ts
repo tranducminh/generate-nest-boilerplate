@@ -1,5 +1,6 @@
 import { BaseEntity } from '@base/entities/base-entity';
 import { Permission } from '@common/constants/permission.const';
+import { UserStatus } from '@common/constants/user-status.constant';
 import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
 import { UserAdminDto } from '../dtos/user.admin.dto';
 import { UserDto } from '../dtos/user.dto';
@@ -24,6 +25,13 @@ export class UserEntity extends BaseEntity<UserDto, UserAdminDto> {
 
   @Column({ type: 'simple-array' })
   permissions: Permission[];
+
+  @Column({
+    type: 'enum',
+    enum: UserStatus,
+    default: UserStatus.PENDING,
+  })
+  status: UserStatus;
 
   @OneToMany(() => UserTokenEntity, (ut) => ut.user, { cascade: true })
   @JoinColumn({ name: 'user_id' })

@@ -1,15 +1,14 @@
-import { Role, User } from '@common/constants/permission.const';
+import { Permission } from '@common/constants/permission.const';
 import { UserEntity } from '@modules/users/entities/user.entity';
 import { UserRepository } from '@modules/users/repositories/user.repository';
 import { Command } from '@nestjs-architects/typed-cqrs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { generateHash } from '@utils/index';
-import { CreateUserAdminDto } from '../dtos/create-user.admin.dto';
 import { CreateUserDto } from '../dtos/create-user.dto';
 
 export class CreateUserCommand extends Command<UserEntity> {
-  constructor(public readonly data: CreateUserDto | CreateUserAdminDto) {
+  constructor(public readonly data: CreateUserDto) {
     super();
   }
 }
@@ -30,7 +29,7 @@ export class CreateUserHandler
     const newUser = this.userRepository.create({
       ...data,
       password: generateHash(data.password),
-      permissions: [Role.USER, User.READ],
+      permissions: [Permission.USER, Permission.USER_READ],
     });
 
     return this.userRepository.save(newUser);

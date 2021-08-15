@@ -3,7 +3,6 @@ import {
   Get,
   Body,
   Patch,
-  Param,
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
@@ -21,9 +20,10 @@ import { JwtAuthGuard } from '@guards/auth.guard';
 import { PermissionGuard } from '@guards/permission.guard';
 import { AuthUser } from '@common/decorators/auth-user.decorator';
 import { JwtClaimDto } from '@common/dtos/jwt-claim.dto';
+import { UserStatusGuard } from '@guards/user-status.guard';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard, PermissionGuard)
+@UseGuards(JwtAuthGuard, PermissionGuard, UserStatusGuard)
 @ApiBearerAuth()
 @ApiTags('Users')
 export class UsersController implements IUsersController {
@@ -42,11 +42,11 @@ export class UsersController implements IUsersController {
   @Patch('me')
   @ApiEmptyDataResponse()
   async update(
-    @Param('id') id: number,
-    @Body() updateUserDto: UpdateUserDto
+    @Body() updateUserDto: UpdateUserDto,
+    @AuthUser() authUser: JwtClaimDto
   ): Promise<ResponseDto<null>> {
-    await this.usersService.update(id, updateUserDto);
+    await this.usersService.update(authUser.id, updateUserDto);
 
-    return generateEmptyRes(HttpStatus.OK, `Update user #${id} successfully`);
+    return generateEmptyRes(HttpStatus.OK, `Update profile successfully`);
   }
 }
