@@ -23,15 +23,21 @@ This generator will help you build your own NestJS app in seconds with CQRS, Typ
   - [Without using Docker](#without-using-docker)
   - [Using Docker](#using-docker)
 - [Start app](#start-app)
-- [Migrations](#migrations)
-  - [Create migration](#create-migration)
-  - [Run migration](#run-migration)
-  - [Revert migration](#revert-migration)
 - [Structure](#structure)
 - [Features](#features)
   - [CQRS](#cqrs)
-  - [Authentication](#authentication)
-  - [Permissions](#permissions)
+  - [Guard](#guard)
+  - [Functions](#functions)
+    - [_Login, signup_](#login-signup)
+    - [_Refresh token (incoming)_](#refresh-token-incoming)
+    - [_Limit device login (incoming)_](#limit-device-login-incoming)
+    - [_Two authenticator (incoming)_](#two-authenticator-incoming)
+    - [_CRUD users_](#crud-users)
+    - [_Reset password_](#reset-password)
+    - [_Send mail_](#send-mail)
+    - [_Upload file S3 (incoming)_](#upload-file-s3-incoming)
+    - [_I18n (incoming)_](#i18n-incoming)
+  - [Migrations](#migrations)
   - [Transformers](#transformers)
   - [Exceptions filter](#exceptions-filter)
   - [Rate limiting](#rate-limiting)
@@ -69,40 +75,18 @@ yarn db:setup:local
 For development environment
 
 ```bash
+yarn migration:run
 yarn start:dev
 ```
 
 For production environment
 
 ```bash
+yarn migration:run
 yarn start:prod
 ```
 
 By default, the app will be run port 8000
-
-## Migrations
-
-### Create migration
-
-Create new migration by running
-
-```bash
-yarn migration:generate {name-of-migration}
-```
-
-The new migration will be created in ```src/databases/migrations```.
-
-### Run migration
-
-```bash
-yarn migration:run
-```
-
-### Revert migration
-
-```bash
-yarn migration:revert
-```
 
 ## Structure
 
@@ -129,17 +113,30 @@ yarn migration:revert
  ┃ ┃ ┗ 📂seeds
  ┃ ┣ 📂guards
  ┃ ┣ 📂jobs
- ┃ ┣ 📂mails
+ ┃ ┣ 📂mail
  ┃ ┣ 📂modules
  ┃ ┃ ┗ 📂{module-name}
  ┃ ┃ ┃ ┣ 📂commands
+ ┃ ┃ ┃ ┃ ┣ 📜{command-name}.admin.command.ts
+ ┃ ┃ ┃ ┃ ┣ 📜{command-name}.command.ts
+ ┃ ┃ ┃ ┃ ┗ 📜{command-name}.local.command.ts
  ┃ ┃ ┃ ┣ 📂controllers
+ ┃ ┃ ┃ ┃ ┣ 📜{module-name}.admin.controller.ts
+ ┃ ┃ ┃ ┃ ┗ 📜{module-name}.controller.ts
  ┃ ┃ ┃ ┣ 📂dtos
+ ┃ ┃ ┃ ┃ ┣ 📜{dto-name}.admin.dto
+ ┃ ┃ ┃ ┃ ┣ 📜{dto-name}.dto.ts
+ ┃ ┃ ┃ ┃ ┗ 📜{dto-name}.local.dto.ts
  ┃ ┃ ┃ ┣ 📂entities
  ┃ ┃ ┃ ┣ 📂interfaces
  ┃ ┃ ┃ ┣ 📂queries
+ ┃ ┃ ┃ ┃ ┣ 📜{command-name}.admin.query.ts
+ ┃ ┃ ┃ ┃ ┣ 📜{command-name}.query.ts
+ ┃ ┃ ┃ ┃ ┗ 📜{command-name}.local.query.ts
  ┃ ┃ ┃ ┣ 📂repositories
  ┃ ┃ ┃ ┣ 📂services
+ ┃ ┃ ┃ ┃ ┣ 📜{module-name}.admin.service.ts
+ ┃ ┃ ┃ ┃ ┗ 📜{module-name}.service.ts
  ┃ ┃ ┃ ┗ 📜{module-name}.module.ts
  ┃ ┣ 📂utils
  ┃ ┣ 📂views
@@ -161,7 +158,9 @@ yarn migration:revert
 In most cases, structure ```model --> repository --> service --> controller``` is sufficient. However, when our requirements become more complex, the ```CQRS``` pattern may be more appropriate and scalable.
 You can defined commands and queries in ```commands``` and ```queries``` folder in each module.
 
-### Authentication
+### Guard
+
+- #### _Authentication_
 
 The boilerplate has been installed ```passport``` and ```jwt```.
 It can be enabled by adding ```JwtAuthGuard``` to necessary routes in controller files.
@@ -172,7 +171,7 @@ It can be enabled by adding ```JwtAuthGuard``` to necessary routes in controller
 
 The ```JwtAuthGuard``` uses combination of ```Redis``` and ```Mysql``` database to optimize the speed of the app
 
-### Permissions
+- #### _Permissions_
 
 To enable the permission guard, add ```PermissionGuard``` to necessary routes in controller files.
 
@@ -197,6 +196,69 @@ User {
 }
 ```
 
+- #### _Account status_
+
+To enabled this guard, add this code ```@UseGuards(UserStatusGuard)```
+
+User account has 3 status:
+
+- ```PENDING```: User register new account and account has not been activated by email
+- ```ACTIVE```: Account has been activated by activation email
+- ```BLOCKED```: Account has been blocked by admin
+
+Only ```ACTIVE``` account can login to the app.
+
+### Functions
+
+- #### _Login, signup_
+
+- #### _Refresh token (incoming)_
+
+- #### _Limit device login (incoming)_
+
+- #### _Two authenticator (incoming)_
+
+- #### _CRUD users_
+  
+  - CRUD ```user``` by ```admin```, ```super_admin```
+  - CRUD ```admin``` by ```super_admin```
+
+- #### _Reset password_
+
+  - By current password
+  - By email verification
+  - By google authenticator (incoming)
+
+- #### _Send mail_
+
+- #### _Upload file S3 (incoming)_
+
+- #### _I18n (incoming)_
+
+### Migrations
+
+- #### _Create migration_
+
+Create new migration by running
+
+```bash
+yarn migration:generate {name-of-migration}
+```
+
+The new migration will be created in ```src/databases/migrations```.
+
+- #### _Run migration_
+
+```bash
+yarn migration:run
+```
+
+- #### _Revert migration_
+
+```bash
+yarn migration:revert
+```
+
 ### Transformers
 
 - Convert ```entity``` to ```dto``` to remove unnecessary properties in returned data such as ```password```. The method ```toDto``` is installed for each entity. It can be used like that
@@ -211,7 +273,7 @@ user.toDto()
 {
   data: ...
   status: 200,
-  message: "Successfull"
+  message: "Successfully"
 }
 ```
 
