@@ -2,6 +2,7 @@ import { UserRepository } from '@modules/users/repositories/user.repository';
 import { Command } from '@nestjs-architects/typed-cqrs';
 import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { generateHash } from '@utils/index';
 import { UpdateUserLocalDto } from '../dtos/update-user.local.dto';
 
 export class UpdateUserLocalCommand extends Command<void> {
@@ -20,12 +21,19 @@ export class UpdateUserLocalHandler
   constructor(private userRepository: UserRepository) {}
 
   async execute(command: UpdateUserLocalCommand): Promise<void> {
-    const { id, data } = command;
+    let { data } = command;
 
-    const user = await this.userRepository.findOne(id);
+    const user = await this.userRepository.findOne(command.id);
 
     if (!user) throw new NotFoundException('User not existed');
 
-    this.userRepository.update(id, data);
+    if (data.password) {
+      data = {
+        ...data,
+        password: generateHash(data.password),
+      };
+    }
+
+    this.userRepository.update(command.id, data);
   }
 }

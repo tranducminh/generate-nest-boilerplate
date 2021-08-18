@@ -33,7 +33,7 @@ export class RequestActivateAccountHandler
     const user = await this.queryBus.execute(getUserQuery);
 
     if (user.status === UserStatus.PENDING) {
-      await this.commandBus.execute(new SendActivationAccountMailCommand(user));
+      this.commandBus.execute(new SendActivationAccountMailCommand(user));
       return;
     }
 

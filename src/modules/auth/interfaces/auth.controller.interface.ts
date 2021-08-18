@@ -1,8 +1,12 @@
+import { JwtClaimDto } from '@common/dtos/jwt-claim.dto';
 import { ResponseDto } from '@common/dtos/response.dto';
 import { AuthDto } from '../dtos/auth.dto';
 import { LoginLocalDto } from '../dtos/login-local.dto';
 import { LogoutLocalDto } from '../dtos/logout-local.dto';
-import { ResendActivationAccountDto } from '../dtos/resend-activation-account.dto';
+import { RequestActivateAccountDto } from '../dtos/request-activate-account.dto';
+import { RequestResetPasswordByEmailVerificationDto } from '../dtos/request-reset-password-by-email-verification.dto';
+import { ResetPasswordByCurrentPasswordDto } from '../dtos/reset-password-by-current_password.dto';
+import { ResetPasswordByEmailVerificationDto } from '../dtos/reset-password-by-email-verification.dto';
 import { SignupLocalDto } from '../dtos/signup-local.dto';
 
 export interface IAuthController {
@@ -15,6 +19,26 @@ export interface IAuthController {
   activateAccount(token: string): Promise<ResponseDto<null>>;
 
   requestActivateAccount(
-    data: ResendActivationAccountDto
+    data: RequestActivateAccountDto
+  ): Promise<ResponseDto<null>>;
+
+  requestResetPasswordByEmailVerification(
+    data: RequestResetPasswordByEmailVerificationDto
+  ): Promise<ResponseDto<null>>;
+
+  resetPasswordByEmailVerification(
+    data: ResetPasswordByEmailVerificationDto
+  ): Promise<ResponseDto<null>>;
+
+  getResetPasswordForm(token: string): Promise<ResetPwdFormParam>;
+
+  resetPasswordByCurrentPassword(
+    authUser: JwtClaimDto,
+    data: ResetPasswordByCurrentPasswordDto
   ): Promise<ResponseDto<null>>;
 }
+
+export type ResetPwdFormParam = {
+  token: string;
+  error: string | null;
+};

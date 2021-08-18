@@ -36,6 +36,8 @@ export class RemoveUserAdminHandler
 
     user.deletedAt = new Date();
 
+    user.deletedById = removeById;
+
     this.userRepository.save(user, { reload: false });
 
     await this.commandBus.execute(new RemoveUserTokenCommand({ userId: id }));

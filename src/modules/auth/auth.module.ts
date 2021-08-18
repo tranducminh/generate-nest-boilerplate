@@ -13,6 +13,10 @@ import { PassportModule } from '@nestjs/passport';
 import { LogoutLocalHandler } from './commands/logout-local.command';
 import { ActivateAccountHandler } from './commands/activate-account.command';
 import { RequestActivateAccountHandler } from './commands/request-activate-account.command';
+import { RequestResetPasswordByEmailVerificationHandler } from './commands/request-reset-password-by-email-verification.command';
+import { CheckResetPasswordTokenHandler } from './commands/check-reset-password-token.command';
+import { ResetPasswordByEmailVerificationHandler } from './commands/reset-password-by-email-verification.command';
+import { ResetPasswordByCurrentPasswordHandler } from './commands/reset-password-by-current_password.command';
 
 const AuthCommandHandlers = [
   CreateTokenHandler,
@@ -21,6 +25,10 @@ const AuthCommandHandlers = [
   LogoutLocalHandler,
   ActivateAccountHandler,
   RequestActivateAccountHandler,
+  RequestResetPasswordByEmailVerificationHandler,
+  ResetPasswordByEmailVerificationHandler,
+  ResetPasswordByCurrentPasswordHandler,
+  CheckResetPasswordTokenHandler,
 ];
 
 @Module({

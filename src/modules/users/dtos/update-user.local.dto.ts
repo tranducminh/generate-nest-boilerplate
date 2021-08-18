@@ -1,6 +1,6 @@
 import { Permission } from '@common/constants/permission.const';
 import { UserStatus } from '@common/constants/user-status.constant';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserLocalDto {
   @IsString()
@@ -18,4 +18,12 @@ export class UpdateUserLocalDto {
   @IsEnum(UserStatus)
   @IsOptional()
   readonly status?: UserStatus;
+
+  @IsString()
+  @IsOptional()
+  readonly password?: string;
+
+  @IsNumber()
+  @IsOptional()
+  readonly resetPasswordMailSentAt?: number;
 }

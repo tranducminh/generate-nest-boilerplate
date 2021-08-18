@@ -3,7 +3,8 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "assets": [
-      "templates/*"
+      "templates/*",
+      "views/*"
     ],
     "watchAssets": true
   }

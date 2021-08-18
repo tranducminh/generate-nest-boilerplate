@@ -34,6 +34,9 @@ export class UserEntity extends BaseEntity<UserDto, UserAdminDto> {
   })
   status: UserStatus;
 
+  @Column({ nullable: true })
+  resetPasswordMailSentAt?: number;
+
   @OneToMany(() => UserTokenEntity, (ut) => ut.user, { cascade: true })
   @JoinColumn({ name: 'user_id' })
   userTokens: UserTokenEntity[];

@@ -34,7 +34,7 @@ export class SendActivationAccountMailHandler
         jti: uuid.v4(),
       },
       {
-        secret: this.appConfig.get('MAIL_SECRET_KEY'),
+        secret: this.appConfig.get('MAIL_ACTIVATION_SECRET_KEY'),
         expiresIn: this.appConfig.get('MAIL_ACTIVATION_EXPIRED_TIME'),
       }
     );

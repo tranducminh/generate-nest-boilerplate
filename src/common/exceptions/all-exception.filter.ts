@@ -1,3 +1,4 @@
+import { JwtErrorMessage } from '@common/constants/jwt-error-message.const';
 import {
   ExceptionFilter,
   Catch,
@@ -8,20 +9,34 @@ import {
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
 
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    let status, message;
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      message = exception.getResponse();
+    } else {
+      switch (exception?.message) {
+        case JwtErrorMessage.JWT_EXPIRED:
+          message = 'Token is expired';
+          status = HttpStatus.BAD_REQUEST;
+          break;
 
-    let message: any =
-      exception instanceof HttpException
-        ? exception.getResponse()
-        : 'Internal server';
+        case JwtErrorMessage.JWT_MALFORMED:
+        case JwtErrorMessage.INVALID_TOKEN:
+          message = 'Token is invalid';
+          status = HttpStatus.BAD_REQUEST;
+          break;
+
+        default:
+          message = 'Internal server';
+          status = HttpStatus.INTERNAL_SERVER_ERROR;
+          break;
+      }
+    }
 
     message = message instanceof Object ? message?.message : message;
 

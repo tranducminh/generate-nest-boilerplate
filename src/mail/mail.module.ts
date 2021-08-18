@@ -6,8 +6,12 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { join } from 'path';
 import { SendActivationAccountMailHandler } from './commands/send-activation-account-mail.command';
+import { SendResetPasswordMailHandler } from './commands/send-reset-password-mail.command';
 
-const MailCommandHandlers = [SendActivationAccountMailHandler];
+const MailCommandHandlers = [
+  SendActivationAccountMailHandler,
+  SendResetPasswordMailHandler,
+];
 
 @Module({
   imports: [

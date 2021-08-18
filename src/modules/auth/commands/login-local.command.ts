@@ -34,7 +34,7 @@ export class LoginLocalHandler
       new GetUserByEmailQuery(data.email)
     );
 
-    if (!isMatchedHash(user.password, data.password)) {
+    if (!(await isMatchedHash(data.password, user.password))) {
       throw new UnauthorizedException('Password is incorrect');
     }
 

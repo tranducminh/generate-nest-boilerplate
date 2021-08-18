@@ -52,6 +52,6 @@ export class UpdateUserAdminHandler
       );
     }
 
-    this.userRepository.update(id, data);
+    this.userRepository.update(id, { ...data, updatedById: updateById });
   }
 }

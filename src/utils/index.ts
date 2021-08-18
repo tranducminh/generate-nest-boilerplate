@@ -43,7 +43,7 @@ export async function isMatchedHash(
   origin: string,
   hash: string
 ): Promise<boolean> {
-  return await bcrypt.compare(origin, hash);
+  return bcrypt.compare(origin, hash);
 }
 
 /**

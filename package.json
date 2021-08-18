@@ -4,6 +4,14 @@
   "description": "This generator will help you build your own NestJS app with CQRS, TypeORM, MySQL, Redis, Typescript, fastify, S3",
   "author": "Tran Duc Minh",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tranducminh/generate-nest-boilerplate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tranducminh/generate-nest-boilerplate/issues"
+  },
+  "homepage": "https://github.com/tranducminh/generate-nest-boilerplate#readme",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -49,6 +57,7 @@
     "fastify-cookie": "^5.3.1",
     "fastify-csrf": "^3.1.0",
     "fastify-helmet": "^5.0.3",
+    "fastify-static": "^4.2.3",
     "fastify-swagger": "^3.3.0",
     "handlebars": "^4.7.7",
     "mysql2": "^2.2.5",
@@ -56,6 +65,7 @@
     "nodemailer": "^6.6.3",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "point-of-view": "^4.15.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
@@ -106,14 +116,6 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tranducminh/generate-nest-boilerplate.git"
-  },
-  "bugs": {
-    "url": "https://github.com/tranducminh/generate-nest-boilerplate/issues"
-  },
-  "homepage": "https://github.com/tranducminh/generate-nest-boilerplate#readme",
   "keys": [
     "nestjs-boilerplate",
     "nestjs",
@@ -123,5 +125,8 @@
     "generator",
     "boilerplate",
     "typescript"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "https://www.npmjs.com/package/generate-nest-boilerplate"
+  }
 }

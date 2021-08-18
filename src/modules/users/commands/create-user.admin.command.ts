@@ -40,7 +40,10 @@ export class CreateUserAdminHandler
       new CheckModifyPermissionsPossibilityCommand(createById, data.permissions)
     );
 
-    const newUser = this.userRepository.create(data);
+    const newUser = this.userRepository.create({
+      ...data,
+      createdById: createById,
+    });
 
     return this.userRepository.save(newUser);
   }
