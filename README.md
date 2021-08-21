@@ -30,7 +30,7 @@ This generator will help you build your own NestJS app in seconds with CQRS, Typ
   - [Functions](#functions)
     - [_Login, signup_](#login-signup)
     - [_Refresh token (incoming)_](#refresh-token-incoming)
-    - [_Manage device login_](#manage-device-login-incoming)
+    - [_Manage device login_](#manage-device-login)
     - [_Two authenticator (incoming)_](#two-authenticator-incoming)
     - [_CRUD users_](#crud-users)
     - [_Reset password_](#reset-password)
