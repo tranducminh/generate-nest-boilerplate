@@ -5,10 +5,10 @@
     <img src="https://img.shields.io/github/license/tranducminh/generate-nest-boilerplate">
   </a>
 
-  <img src="https://img.shields.io/badge/version-1.0-red">
+  <img src="https://img.shields.io/badge/version-1.2.0-red">
   
   <a href="https://www.npmjs.com/package/generate-nest-boilerplate" target="_blank">
-    <img src="https://img.shields.io/badge/npm-1.0.0-red?style=flat&logo=npm">
+    <img src="https://img.shields.io/badge/npm-1.2.0-red?style=flat&logo=npm">
   </a>
 </div>
 
@@ -30,7 +30,7 @@ This generator will help you build your own NestJS app in seconds with CQRS, Typ
   - [Functions](#functions)
     - [_Login, signup_](#login-signup)
     - [_Refresh token (incoming)_](#refresh-token-incoming)
-    - [_Limit device login (incoming)_](#limit-device-login-incoming)
+    - [_Manage device login_](#manage-device-login-incoming)
     - [_Two authenticator (incoming)_](#two-authenticator-incoming)
     - [_CRUD users_](#crud-users)
     - [_Reset password_](#reset-password)
@@ -214,16 +214,23 @@ Only ```ACTIVE``` account can login to the app.
 
 - #### _Refresh token (incoming)_
 
-- #### _Limit device login (incoming)_
+- #### _Manage device login_
+  API prefix: ```/auth/devices```
+  - Get all device information which is logined
+  - Get current device infomation
+  - Logout all device
+  - Logout one device
 
 - #### _Two authenticator (incoming)_
 
 - #### _CRUD users_
-  
+  API prefix: ```/users``` and ```/admin/users```
+
   - CRUD ```user``` by ```admin```, ```super_admin```
   - CRUD ```admin``` by ```super_admin```
 
 - #### _Reset password_
+  API prefix: ```/auth/reset-password```
 
   - By current password
   - By email verification
