@@ -16,13 +16,19 @@ import { ResetPasswordByCurrentPasswordDto } from '../dtos/reset-password-by-cur
 import { ResetPasswordByEmailVerificationDto } from '../dtos/reset-password-by-email-verification.dto';
 import { SignupLocalDto } from '../dtos/signup-local.dto';
 import { IAuthService } from '../interfaces/auth.service.interface';
+import DeviceDetector = require('device-detector-js');
 
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(private readonly commandBus: CommandBus) {}
 
-  async login(data: LoginLocalDto): Promise<AuthDto> {
-    const command = new LoginLocalCommand(data);
+  async login(data: LoginLocalDto, userAgent?: string): Promise<AuthDto> {
+    const deviceDetector = new DeviceDetector();
+
+    const command = new LoginLocalCommand(
+      data,
+      deviceDetector.parse(userAgent || '')
+    );
 
     return this.commandBus.execute(command);
   }

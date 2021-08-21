@@ -8,9 +8,10 @@ import { RequestResetPasswordByEmailVerificationDto } from '../dtos/request-rese
 import { ResetPasswordByCurrentPasswordDto } from '../dtos/reset-password-by-current_password.dto';
 import { ResetPasswordByEmailVerificationDto } from '../dtos/reset-password-by-email-verification.dto';
 import { SignupLocalDto } from '../dtos/signup-local.dto';
+import { Request } from 'express';
 
 export interface IAuthController {
-  login(data: LoginLocalDto): Promise<ResponseDto<AuthDto>>;
+  login(data: LoginLocalDto, req: Request): Promise<ResponseDto<AuthDto>>;
 
   signup(data: SignupLocalDto): Promise<ResponseDto<null>>;
 

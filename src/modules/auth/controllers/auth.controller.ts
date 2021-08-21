@@ -8,6 +8,7 @@ import { generateEmptyRes, ResponseDto } from '@common/dtos/response.dto';
 import { JwtAuthGuard } from '@guards/auth.guard';
 import { UserStatusGuard } from '@guards/user-status.guard';
 import {
+  Req,
   Get,
   Body,
   HttpStatus,
@@ -32,6 +33,7 @@ import {
   ResetPwdFormParam,
 } from '../interfaces/auth.controller.interface';
 import { AuthService } from '../services/auth.service';
+import { Request } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -41,8 +43,13 @@ export class AuthController implements IAuthController {
   @Post('login')
   @UseGuards(UserStatusGuard)
   @ApiSingleDataResponse(AuthDto)
-  async login(@Body() data: LoginLocalDto): Promise<ResponseDto<AuthDto>> {
-    const auth = await this.authService.login(data);
+  async login(
+    @Body() data: LoginLocalDto,
+    @Req() req: Request
+  ): Promise<ResponseDto<AuthDto>> {
+    const userAgent = req.headers['user-agent'];
+
+    const auth = await this.authService.login(data, userAgent);
 
     return auth.toResponse();
   }

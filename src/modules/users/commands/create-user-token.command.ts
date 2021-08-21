@@ -4,11 +4,13 @@ import {
   CommandHandler,
   ICommandHandler,
 } from '@nestjs-architects/typed-cqrs';
+import { DeviceDetectorResult } from 'device-detector-js';
 
 interface ICreateUserToken {
   userId: number;
   iat: number;
   exp: number;
+  userAgent: DeviceDetectorResult;
 }
 
 export class CreateUserTokenCommand extends Command<void> {

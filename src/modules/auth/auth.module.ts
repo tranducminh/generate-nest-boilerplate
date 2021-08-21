@@ -17,6 +17,8 @@ import { RequestResetPasswordByEmailVerificationHandler } from './commands/reque
 import { CheckResetPasswordTokenHandler } from './commands/check-reset-password-token.command';
 import { ResetPasswordByEmailVerificationHandler } from './commands/reset-password-by-email-verification.command';
 import { ResetPasswordByCurrentPasswordHandler } from './commands/reset-password-by-current_password.command';
+import { AuthDeviceController } from './controllers/auth-device.controller';
+import { AuthDeviceService } from './services/auth-device.service';
 
 const AuthCommandHandlers = [
   CreateTokenHandler,
@@ -46,7 +48,12 @@ const AuthCommandHandlers = [
       inject: [AppConfig],
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, ...AuthCommandHandlers],
+  controllers: [AuthController, AuthDeviceController],
+  providers: [
+    AuthService,
+    AuthDeviceService,
+    JwtStrategy,
+    ...AuthCommandHandlers,
+  ],
 })
 export class AuthModule {}

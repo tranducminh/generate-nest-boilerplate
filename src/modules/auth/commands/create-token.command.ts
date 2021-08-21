@@ -8,9 +8,13 @@ import { CreateUserTokenCommand } from '@modules/users/commands/create-user-toke
 import { RemoveIatRecordCommand } from '@modules/users/commands/remove-iat-record.command';
 import { RemovePermissionRecordCommand } from '@modules/users/commands/remove-permission-record.command';
 import { RemoveUserStatusRecordCommand } from '@modules/users/commands/remove-user-status-record.command';
+import { DeviceDetectorResult } from 'device-detector-js';
 
 export class CreateTokenCommand extends Command<string> {
-  constructor(public readonly user: UserEntity) {
+  constructor(
+    public readonly user: UserEntity,
+    public readonly userAgent: DeviceDetectorResult
+  ) {
     super();
   }
 }
@@ -26,7 +30,7 @@ export class CreateTokenHandler
   ) {}
 
   async execute(command: CreateTokenCommand): Promise<string> {
-    const { user } = command;
+    const { user, userAgent } = command;
 
     const accessToken = await this.jwtService.signAsync(
       {
@@ -42,7 +46,7 @@ export class CreateTokenHandler
     const { iat, exp } = this.jwtService.verify(accessToken);
 
     await this.commandBus.execute(
-      new CreateUserTokenCommand({ userId: user.id, iat, exp })
+      new CreateUserTokenCommand({ userId: user.id, iat, exp, userAgent })
     );
 
     await this.commandBus.execute(new RemoveIatRecordCommand([user.id]));

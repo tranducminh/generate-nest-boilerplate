@@ -11,9 +11,13 @@ import { Command } from '@nestjs-architects/typed-cqrs';
 import { LoginLocalDto } from '@modules/auth/dtos/login-local.dto';
 import { CreateTokenCommand } from './create-token.command';
 import { GetUserByEmailQuery } from '@modules/users/queries/get-user-by-email.query';
+import { DeviceDetectorResult } from 'device-detector-js';
 
 export class LoginLocalCommand extends Command<AuthDto> {
-  constructor(public readonly data: LoginLocalDto) {
+  constructor(
+    public readonly data: LoginLocalDto,
+    public readonly userAgent: DeviceDetectorResult
+  ) {
     super();
   }
 }
@@ -28,7 +32,7 @@ export class LoginLocalHandler
   ) {}
 
   async execute(command: LoginLocalCommand): Promise<AuthDto> {
-    const { data } = command;
+    const { data, userAgent } = command;
 
     const user = await this.queryBus.execute(
       new GetUserByEmailQuery(data.email)
@@ -38,7 +42,9 @@ export class LoginLocalHandler
       throw new UnauthorizedException('Password is incorrect');
     }
 
-    const token = await this.commandBus.execute(new CreateTokenCommand(user));
+    const token = await this.commandBus.execute(
+      new CreateTokenCommand(user, userAgent)
+    );
 
     return new AuthDto(user.toDto(), token);
   }

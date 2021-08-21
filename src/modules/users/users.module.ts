@@ -25,6 +25,8 @@ import { UpdateUserAdminHandler } from './commands/update-user.admin.command';
 import { CreateUserAdminHandler } from './commands/create-user.admin.command';
 import { CheckModifyPermissionsPossibilityHandler } from './commands/check-modify-permissons-possibility.command';
 import { UpdateUserLocalHandler } from './commands/update-user.local.command';
+import { GetUserTokenHandler } from './queries/get-user-token.query';
+import { GetUserTokenByUserIdHandler } from './queries/get-user-token-by-user-id.query';
 
 const UsersCommandHandlers = [
   CreateUserHandler,
@@ -48,6 +50,8 @@ const UsersQueryHandlers = [
   GetIatRecordHandler,
   GetPermissionRecordHandler,
   GetUserStatusRecordHandler,
+  GetUserTokenHandler,
+  GetUserTokenByUserIdHandler,
 ];
 
 @Module({

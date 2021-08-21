@@ -21,9 +21,13 @@ export class LogoutLocalHandler
   async execute(command: LogoutLocalCommand): Promise<void> {
     const { id, iat } = command.data;
 
-    await this.commandBus.execute(
-      new RemoveUserTokenCommand({ userId: id, iats: [iat] })
-    );
+    if (iat) {
+      await this.commandBus.execute(
+        new RemoveUserTokenCommand({ userId: id, iats: [iat] })
+      );
+    } else {
+      await this.commandBus.execute(new RemoveUserTokenCommand({ userId: id }));
+    }
 
     await this.commandBus.execute(new RemoveIatRecordCommand([id]));
 

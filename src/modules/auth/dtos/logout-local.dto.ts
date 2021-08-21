@@ -5,5 +5,5 @@ export class LogoutLocalDto {
   id: number;
 
   @ApiProperty()
-  iat: number;
+  iat?: number;
 }

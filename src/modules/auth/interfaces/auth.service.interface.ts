@@ -6,7 +6,7 @@ import { ResetPasswordByEmailVerificationDto } from '../dtos/reset-password-by-e
 import { SignupLocalDto } from '../dtos/signup-local.dto';
 
 export interface IAuthService {
-  login(data: LoginLocalDto): Promise<AuthDto>;
+  login(data: LoginLocalDto, userAgent?: string): Promise<AuthDto>;
 
   signup(data: SignupLocalDto): Promise<void>;
 

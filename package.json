@@ -53,6 +53,7 @@
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "device-detector-js": "^2.2.10",
     "email-existence": "^0.1.6",
     "fastify-cookie": "^5.3.1",
     "fastify-csrf": "^3.1.0",
