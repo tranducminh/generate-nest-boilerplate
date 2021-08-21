@@ -12,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { join } from 'path';
+import { COOKIE_AUTH_NAME } from '@common/constants/cookie.const';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -65,7 +66,7 @@ async function bootstrap() {
     .setTitle('My app')
     .setDescription('My app description')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addCookieAuth(COOKIE_AUTH_NAME)
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);

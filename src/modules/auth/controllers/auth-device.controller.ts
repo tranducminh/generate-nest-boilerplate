@@ -1,3 +1,4 @@
+import { COOKIE_AUTH_NAME } from '@common/constants/cookie.const';
 import {
   ApiEmptyDataResponse,
   ApiSingleDataResponse,
@@ -14,14 +15,16 @@ import {
   Controller,
   Query,
   HttpStatus,
+  Res,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FastifyReply } from 'fastify';
 import { IAuthDeviceController } from '../interfaces/auth-device.controller.interface';
 import { AuthDeviceService } from '../services/auth-device.service';
 
 @ApiTags('Auth')
 @Controller('auth/devices')
-@ApiBearerAuth()
+@ApiCookieAuth()
 @UseGuards(JwtAuthGuard)
 export class AuthDeviceController implements IAuthDeviceController {
   constructor(private readonly authDeviceService: AuthDeviceService) {}
@@ -66,9 +69,12 @@ export class AuthDeviceController implements IAuthDeviceController {
   @ApiEmptyDataResponse()
   @ApiOperation({ summary: 'Logout all device' })
   async removeAll(
-    @AuthUser() authUser: JwtClaimDto
+    @AuthUser() authUser: JwtClaimDto,
+    @Res() res: FastifyReply
   ): Promise<ResponseDto<null>> {
     await this.authDeviceService.removeAll(authUser.id);
+
+    res.clearCookie(COOKIE_AUTH_NAME);
 
     return generateEmptyRes(HttpStatus.OK, `Logout successfully`);
   }
@@ -77,9 +83,12 @@ export class AuthDeviceController implements IAuthDeviceController {
   @ApiEmptyDataResponse()
   async removeOne(
     @Query('iat') iat: number,
-    @AuthUser() authUser: JwtClaimDto
+    @AuthUser() authUser: JwtClaimDto,
+    @Res() res: FastifyReply
   ): Promise<ResponseDto<null>> {
     await this.authDeviceService.removeOne(iat, authUser.id);
+
+    res.clearCookie(COOKIE_AUTH_NAME);
 
     return generateEmptyRes(HttpStatus.OK, `Logout successfully`);
   }

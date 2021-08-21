@@ -8,14 +8,18 @@ import { RequestResetPasswordByEmailVerificationDto } from '../dtos/request-rese
 import { ResetPasswordByCurrentPasswordDto } from '../dtos/reset-password-by-current_password.dto';
 import { ResetPasswordByEmailVerificationDto } from '../dtos/reset-password-by-email-verification.dto';
 import { SignupLocalDto } from '../dtos/signup-local.dto';
-import { Request } from 'express';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 export interface IAuthController {
-  login(data: LoginLocalDto, req: Request): Promise<ResponseDto<AuthDto>>;
+  login(
+    data: LoginLocalDto,
+    req: FastifyRequest,
+    res: FastifyReply
+  ): Promise<ResponseDto<AuthDto>>;
 
   signup(data: SignupLocalDto): Promise<ResponseDto<null>>;
 
-  logout(data: LogoutLocalDto): Promise<ResponseDto<null>>;
+  logout(data: LogoutLocalDto, res: FastifyReply): Promise<ResponseDto<null>>;
 
   activateAccount(token: string): Promise<ResponseDto<null>>;
 

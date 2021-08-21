@@ -11,7 +11,7 @@ import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UserDto } from '../dtos/user.dto';
 import { generateEmptyRes, ResponseDto } from '@common/dtos/response.dto';
 import { IUsersController } from '../interfaces/users.controller.interface';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import {
   ApiEmptyDataResponse,
   ApiSingleDataResponse,
@@ -24,7 +24,7 @@ import { UserStatusGuard } from '@guards/user-status.guard';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard, PermissionGuard, UserStatusGuard)
-@ApiBearerAuth()
+@ApiCookieAuth()
 @ApiTags('Users')
 export class UsersController implements IUsersController {
   constructor(private readonly usersService: UsersService) {}

@@ -1,9 +1,9 @@
-import { RemoveUserTokenCommand } from '@modules/users/commands/remove-user-token.command';
 import { UserTokenDto } from '@modules/users/dtos/user-token.dto';
 import { GetUserTokenByUserIdQuery } from '@modules/users/queries/get-user-token-by-user-id.query';
 import { GetUserTokenQuery } from '@modules/users/queries/get-user-token.query';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { LogoutLocalCommand } from '../commands/logout-local.command';
 import { IAuthDeviceService } from '../interfaces/auth-device.service.interface';
 
 @Injectable()
@@ -30,13 +30,13 @@ export class AuthDeviceService implements IAuthDeviceService {
   }
 
   async removeAll(userId: number): Promise<void> {
-    const command = new RemoveUserTokenCommand({ userId });
+    const command = new LogoutLocalCommand({ id: userId });
 
     await this.commandBus.execute(command);
   }
 
   async removeOne(iat: number, userId: number): Promise<void> {
-    const command = new RemoveUserTokenCommand({ userId, iats: [iat] });
+    const command = new LogoutLocalCommand({ id: userId, iat });
 
     await this.commandBus.execute(command);
   }

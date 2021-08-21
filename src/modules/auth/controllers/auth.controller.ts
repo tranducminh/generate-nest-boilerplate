@@ -18,8 +18,9 @@ import {
   Query,
   Render,
   Patch,
+  Res,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { AuthDto } from '../dtos/auth.dto';
 import { LoginLocalDto } from '../dtos/login-local.dto';
 import { LogoutLocalDto } from '../dtos/logout-local.dto';
@@ -33,23 +34,31 @@ import {
   ResetPwdFormParam,
 } from '../interfaces/auth.controller.interface';
 import { AuthService } from '../services/auth.service';
-import { Request } from 'express';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { AppConfig } from '@configs/app/app.config';
+import { COOKIE_AUTH_NAME } from '@common/constants/cookie.const';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController implements IAuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private appConfig: AppConfig) {}
 
   @Post('login')
   @UseGuards(UserStatusGuard)
   @ApiSingleDataResponse(AuthDto)
   async login(
     @Body() data: LoginLocalDto,
-    @Req() req: Request
+    @Req() req: FastifyRequest,
+    @Res({ passthrough: true }) res: FastifyReply
   ): Promise<ResponseDto<AuthDto>> {
     const userAgent = req.headers['user-agent'];
 
     const auth = await this.authService.login(data, userAgent);
+
+    res.setCookie(COOKIE_AUTH_NAME, auth.token, {
+      maxAge: this.appConfig.getNumber('COOKIE_MAX_AGE'),
+      path: '/',
+    });
 
     return auth.toResponse();
   }
@@ -64,10 +73,15 @@ export class AuthController implements IAuthController {
 
   @Post('logout')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiCookieAuth()
   @ApiEmptyDataResponse()
-  async logout(@AuthUser() data: LogoutLocalDto): Promise<ResponseDto<null>> {
+  async logout(
+    @AuthUser() data: LogoutLocalDto,
+    @Res({ passthrough: true }) res: FastifyReply
+  ): Promise<ResponseDto<null>> {
     await this.authService.logout(data);
+
+    res.clearCookie(COOKIE_AUTH_NAME);
 
     return generateEmptyRes(HttpStatus.OK, `Logout successfully`);
   }

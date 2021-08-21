@@ -23,7 +23,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { CreateUserAdminDto } from '../dtos/create-user.admin.dto';
 import { UpdateUserAdminDto } from '../dtos/update-user.admin.dto';
 import { UserFilterDto } from '../dtos/user-filter.dto';
@@ -33,7 +33,7 @@ import { UsersAdminService } from '../services/users.admin.service';
 
 @Controller('admin/users')
 @UseGuards(JwtAuthGuard, PermissionGuard, UserStatusGuard)
-@ApiBearerAuth()
+@ApiCookieAuth()
 @ApiTags('Admin')
 export class UsersAdminController implements IUsersAdminController {
   constructor(private readonly usersAdminService: UsersAdminService) {}
