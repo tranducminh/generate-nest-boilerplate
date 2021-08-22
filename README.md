@@ -18,17 +18,14 @@ This generator will help you build your own NestJS app in seconds with CQRS, Typ
 <h2>Table of Contents</h2>
 
 - [Create new app](#create-new-app)
-  - [Using npx](#using-npx)
 - [Setup environments](#setup-environments)
-  - [Without using Docker](#without-using-docker)
-  - [Using Docker](#using-docker)
 - [Start app](#start-app)
 - [Structure](#structure)
 - [Features](#features)
   - [CQRS](#cqrs)
   - [Guard](#guard)
   - [Functions](#functions)
-    - [_Login, signup_](#login-signup)
+    - [_Authentication_](#authentication)
     - [_Refresh token (incoming)_](#refresh-token-incoming)
     - [_Manage device login_](#manage-device-login)
     - [_Two authenticator (incoming)_](#two-authenticator-incoming)
@@ -43,11 +40,12 @@ This generator will help you build your own NestJS app in seconds with CQRS, Typ
   - [Rate limiting](#rate-limiting)
   - [Swagger](#swagger)
   - [Compodoc](#compodoc)
+  - [Linter](#linter)
 - [License](#license)
 
 ## Create new app
 
-### Using npx
+- ### Using npx
 
 ```bash
 npx generate-nest-boilerplate {your-app}
@@ -60,11 +58,11 @@ npx generate-nest-boilerplate {your-app}
 
 > You can create ***.env.development*** or ***.env.staging*** or ***.env.production*** file depend on your environment
 
-### Without using Docker
+- ### Without using Docker
 
 You have to install `Mysql`, `Redis` and replace respective env variables in env file
 
-### Using Docker
+- ### Using Docker
 
 ```bash
 yarn db:setup:local
@@ -124,7 +122,7 @@ By default, the app will be run port 8000
  ┃ ┃ ┃ ┃ ┣ 📜{module-name}.admin.controller.ts
  ┃ ┃ ┃ ┃ ┗ 📜{module-name}.controller.ts
  ┃ ┃ ┃ ┣ 📂dtos
- ┃ ┃ ┃ ┃ ┣ 📜{dto-name}.admin.dto
+ ┃ ┃ ┃ ┃ ┣ 📜{dto-name}.admin.dto.ts
  ┃ ┃ ┃ ┃ ┣ 📜{dto-name}.dto.ts
  ┃ ┃ ┃ ┃ ┗ 📜{dto-name}.local.dto.ts
  ┃ ┃ ┃ ┣ 📂entities
@@ -151,18 +149,30 @@ By default, the app will be run port 8000
  ┗ 📜tsconfig.json
 ```
 
+_**Naming rules:**_
+
+- ```{file-name}.{file-type}.ts```: file only for ```user``` permission or lower
+- ```{file-name}.admin.{file-type}.ts```: file only for ```admin``` permission or higher
+- ```{file-name}.local.{file-type}.ts```: file only use in logic code, not use in ```service``` or ```controller``` folder
+
+_**DTO files is divided into 2 types**_: ```input dto``` and ```output dto```
+
+- Input dto file example: [```create-user.dto.ts```](https://github.com/tranducminh/generate-nest-boilerplate/blob/master/src/modules/users/dtos/create-user.dto.ts)
+- Output dto file example: [```user.dto.ts```](https://github.com/tranducminh/generate-nest-boilerplate/blob/master/src/modules/users/dtos/user.dto.ts)
+
 ## Features
 
 ### CQRS
 
-In most cases, structure ```model --> repository --> service --> controller``` is sufficient. However, when our requirements become more complex, the ```CQRS``` pattern may be more appropriate and scalable.
+In most cases, structure ```model --> repository --> service --> controller``` is sufficient. However, when our requirements become more complex, the ```CQRS``` pattern may be more appropriate and scalable.  
 You can defined commands and queries in ```commands``` and ```queries``` folder in each module.
 
 ### Guard
 
 - #### _Authentication_
 
-The boilerplate has been installed ```passport``` and ```jwt```.
+The boilerplate has been installed ```passport``` and ```jwt```.  
+```jwt token``` is installed in ```cookies``` that auto be sent with each request.  
 It can be enabled by adding ```JwtAuthGuard``` to necessary routes in controller files.
 
 ```bash
@@ -179,7 +189,7 @@ To enable the permission guard, add ```PermissionGuard``` to necessary routes in
 @UseGuards(PermissionGuard)
 ```
 
-Some permissions have been installed. Visit file ```src/common/constants/permission.const.ts``` to view detail.
+Some permissions have been installed. Visit file [```src/common/constants/permission.const.ts```](https://github.com/tranducminh/generate-nest-boilerplate/blob/master/src/common/constants/permission.const.ts) to view detail.
 
 ```bash
 Role {
@@ -210,12 +220,18 @@ Only ```ACTIVE``` account can login to the app.
 
 ### Functions
 
-- #### _Login, signup_
+- #### _Authentication_
+  
+  - Login: ```/auth/login```
+  - Signup: ```/auth/signup```
+  - Logout: ```/auth/logout```
 
 - #### _Refresh token (incoming)_
 
 - #### _Manage device login_
-  API prefix: ```/auth/devices```
+
+  _API prefix_: ```/auth/devices```
+
   - Get all device information which is logined
   - Get current device infomation
   - Logout all device
@@ -224,19 +240,26 @@ Only ```ACTIVE``` account can login to the app.
 - #### _Two authenticator (incoming)_
 
 - #### _CRUD users_
-  API prefix: ```/users``` and ```/admin/users```
+
+  _API prefix_: ```/users``` and ```/admin/users```
 
   - CRUD ```user``` by ```admin```, ```super_admin```
   - CRUD ```admin``` by ```super_admin```
 
 - #### _Reset password_
-  API prefix: ```/auth/reset-password```
+
+  _API prefix_: ```/auth/reset-password```
 
   - By current password
   - By email verification
   - By google authenticator (incoming)
 
 - #### _Send mail_
+
+  - Send mail to activate account
+  - Send mail to reset password
+  
+  Visit [```src/mail/commands```](https://github.com/tranducminh/generate-nest-boilerplate/tree/master/src/mail/commands) for details
 
 - #### _Upload file S3 (incoming)_
 
@@ -326,6 +349,10 @@ yarn compodoc
 ```
 
 By default, you can see the compodoc on [http://localhost:8080](http://localhost:8080)
+
+### Linter
+
+```eslint``` + ```prettier``` = ❤️
 
 ## License
 
